@@ -1,4 +1,4 @@
-package com.java.solved;
+package com.java.swea;
 
 // 2063. 중간값 찾기
 /* 입력

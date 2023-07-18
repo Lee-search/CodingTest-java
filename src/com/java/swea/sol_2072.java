@@ -1,4 +1,4 @@
-package com.java.solved;
+package com.java.swea;
 
 // 2072. 홀수만 더하기
 /* 입력

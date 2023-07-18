@@ -1,4 +1,4 @@
-package com.java.solved;
+package com.java.swea;
 
 // 1936. 1대1 가위바위보
 /* 입력

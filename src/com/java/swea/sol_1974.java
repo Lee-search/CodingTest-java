@@ -1,4 +1,4 @@
-package com.java.solved;
+package com.java.swea;
 
 // 1974. 스도쿠 검증
 /* 입력
