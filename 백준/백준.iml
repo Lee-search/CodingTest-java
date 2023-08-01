@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/Silver/1244. 스위치 켜고 끄기" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Silver/15649. N과 M （1）" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Silver/17478. 재귀함수가 뭔가요？" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
