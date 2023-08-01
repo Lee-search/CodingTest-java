@@ -1,4 +1,4 @@
-package com.java.swea;
+package others.swea;
 
 // 12712. 파리퇴치3
 /* 입력

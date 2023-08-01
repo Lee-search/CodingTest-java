@@ -1,11 +1,12 @@
-package com.java.baekjoon;
-
-import java.util.*;
+package others.baekjoon;
 
 // https://www.acmicpc.net/problem/3190
 // 뱀: 구현, 시뮬레이션, 큐
 
-public class sol_3190 {
+
+import java.util.*;
+
+public class Main_3190 {
     private static final String ArrayList = null;
 
     public static void main(String[] args) {

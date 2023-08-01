@@ -1,4 +1,4 @@
-package com.java.swea;
+package others.swea;
 
 // 1936. 1대1 가위바위보
 /* 입력

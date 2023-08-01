@@ -1,4 +1,8 @@
-package com.java.baekjoon;
+package others.baekjoon;
+
+// https://www.acmicpc.net/problem/15686
+// 치킨 배달: DFS 백트래킹으로 해결,
+// 치킨집 m개를 백트래킹으로 선택한 후 일반집.size 만큼 완전탐색
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,11 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-// https://www.acmicpc.net/problem/15686
-// 치킨 배달: DFS 백트래킹으로 해결,
-// 치킨집 m개를 백트래킹으로 선택한 후 일반집.size 만큼 완전탐색
-
-public class sol_15683 {
+public class Main_15686 {
     static int n, m;
     static List<int[]> h_list;
     static List<int[]> c_list;

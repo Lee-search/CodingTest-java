@@ -1,11 +1,13 @@
-package com.java.main;
+package others.baekjoon;
+
+// https://www.acmicpc.net/problem/14501
+// 퇴사: DFS, DP(로 풀수도있음)
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main_14501 {
     public static int n;	// n - 1일까지 근무
     public static int[][] workList;
     public static int answer = 0;	// 최대 급여
@@ -33,8 +35,7 @@ public class Main {
     		return;
     	}
     	
-    	if(day + workList[day][0] < n) {
-    		System.out.println(day + " : " + workList[day][0]);
+    	if(day + workList[day][0] <= n) {
     		// 해당 일을 골랐을 때
     		dfs(day + workList[day][0], total + workList[day][1]);
     	}

@@ -42,7 +42,7 @@ public class Solution_D3_2805 {
 				
 			}
 			
-			System.out.println("#" + " " + tc + " " + answer);
+			System.out.println("#" + tc + " " + answer);
 			
 		}
 	}

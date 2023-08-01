@@ -1,4 +1,4 @@
-package com.java.swea;
+package others.swea;
 
 // 1961. 숫자 배열 회전
 /* 입력

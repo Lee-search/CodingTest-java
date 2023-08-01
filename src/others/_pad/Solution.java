@@ -1,4 +1,4 @@
-package com.java.main;
+package others._pad;
 
 import java.util.*;
 

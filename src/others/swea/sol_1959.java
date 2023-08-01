@@ -1,4 +1,4 @@
-package com.java.swea;
+package others.swea;
 
 // 1959. 두 개의 숫자열
 /* 입력

@@ -1,4 +1,4 @@
-package com.java.swea;
+package others.swea;
 
 // 2068. 최대수 구하기
 /* 입력

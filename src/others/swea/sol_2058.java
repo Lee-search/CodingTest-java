@@ -1,4 +1,4 @@
-package com.java.swea;
+package others.swea;
 
 // 2058. 자릿수 더하기
 
