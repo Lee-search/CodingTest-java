@@ -29,7 +29,9 @@ public class Main {
 			int start = Integer.parseInt(st.nextToken());
 			int end = Integer.parseInt(st.nextToken());
 			
-			System.out.println(sums[end] - sums[start - 1]);
+//			System.out.println(sums[end] - sums[start - 1]);
+			osr.write(sums[end] - sums[start - 1] + "\n");
 		}
+		osr.flush();
 	} // end of main
 }
