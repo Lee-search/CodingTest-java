@@ -9,12 +9,10 @@ public class Solution {
 	
 	public static int[] tickets;
 	public static int[] plans;
-	public static boolean[] isSelected;
 	public static int[] myPlan;
 	public static int answer;
 	
 	public static void main(String[] args) throws Exception {
-		//System.setIn(new FileInputStream(new File("./src/w0807/sample_input.txt")));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
@@ -24,7 +22,6 @@ public class Solution {
 			
 			tickets = new int[4];
 			plans = new int[12];
-			isSelected = new boolean[12];
 			myPlan = new int[12];
 			
 			st = new StringTokenizer(br.readLine());	// 이용권 가격
@@ -41,6 +38,7 @@ public class Solution {
 		
 		System.out.print(sb);
 	} // end of main
+	
 	
 	public static void DFS(int cnt) {	// cnt: 0~11 + 1월
 		
