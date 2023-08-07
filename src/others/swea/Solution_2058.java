@@ -11,7 +11,7 @@ package others.swea;
 import java.util.*;
 import java.io.*;
 
-public class sol_2058 {
+public class Solution_2058 {
     public static void main(String[] args) throws Exception, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());

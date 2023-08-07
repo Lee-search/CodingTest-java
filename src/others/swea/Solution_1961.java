@@ -16,7 +16,7 @@ package others.swea;
  */
 
 import java.util.*;
-public class sol_1961 {
+public class Solution_1961 {
     public static int[][] rotate(int[][] plain, int n){
         int[][] rotated = new int [n][n];
 

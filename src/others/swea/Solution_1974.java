@@ -18,7 +18,7 @@ package others.swea;
  */
 
 import java.util.*;
-public class sol_1974 {
+public class Solution_1974 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 

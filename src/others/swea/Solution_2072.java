@@ -16,7 +16,7 @@ package others.swea;
 import java.util.*;
 import java.io.*;
 
-public class sol_2072 {
+public class Solution_2072 {
     public static void main(String args[]) throws Exception {
         Scanner sc = new Scanner(System.in);
         int T = sc.nextInt();
