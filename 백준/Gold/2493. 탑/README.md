@@ -51,37 +51,37 @@ KOI 통신연구소는 레이저를 이용한 새로운 비밀 통신 시스템 
 
 **N개 탑의 높이 = [ 6, 9, 5, 7, 4 ]**
 
-![슬라이드1.PNG](./imgs/1.png)
+![슬라이드1.PNG](https://github.com/Lee-search/java-example/blob/master/%EB%B0%B1%EC%A4%80/Gold/2493.%E2%80%85%ED%83%91/imgs/1.PNG?raw=true)
 
 1. 첫번째 탑 → 수신 가능한 탑 없음
 
 ---
 
-![슬라이드2.PNG](./imgs/2.png)
+![슬라이드2.PNG](https://github.com/Lee-search/java-example/blob/master/%EB%B0%B1%EC%A4%80/Gold/2493.%E2%80%85%ED%83%91/imgs/2.PNG?raw=true)
 
 2. 두번째 탑 → 첫번째 탑 수신 불가능 → pop()
 
 ---
 
-![슬라이드3.PNG](./imgs/3.png)
+![슬라이드3.PNG](https://github.com/Lee-search/java-example/blob/master/%EB%B0%B1%EC%A4%80/Gold/2493.%E2%80%85%ED%83%91/imgs/3.PNG?raw=true)
 
 3. 세번째 탑 → 두번째 탑이 수신
 
 ---
 
-![슬라이드4.PNG](./imgs/4.png)
+![슬라이드4.PNG](https://github.com/Lee-search/java-example/blob/master/%EB%B0%B1%EC%A4%80/Gold/2493.%E2%80%85%ED%83%91/imgs/4.PNG?raw=true)
 
 4. 네번째 탑 → 세번째 탑 수신 불가능 → pop()
 
 ---
 
-![슬라이드5.PNG](./imgs/5.png)
+![슬라이드5.PNG](https://github.com/Lee-search/java-example/blob/master/%EB%B0%B1%EC%A4%80/Gold/2493.%E2%80%85%ED%83%91/imgs/5.PNG?raw=true)
 
 5. 네번째 탑 → 두번째 탑이 수신
 
 ---
 
-![슬라이드6.PNG](./imgs/6.png)
+![슬라이드6.PNG](https://github.com/Lee-search/java-example/blob/master/%EB%B0%B1%EC%A4%80/Gold/2493.%E2%80%85%ED%83%91/imgs/6.PNG?raw=true)
 
 6. 다섯번째 탑 → 4번째 탑이 수신
 
