@@ -1,4 +1,4 @@
-package w0807;
+package others.swea;
 
 import java.io.BufferedReader;
 import java.io.File;

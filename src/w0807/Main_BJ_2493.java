@@ -2,6 +2,8 @@ package w0807;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -44,6 +46,10 @@ public class Main_BJ_2493 {
 			sb.append(answer[i]).append(" ");
 		}
 		System.out.println(sb);
+//		for(int i = 0; i < stack.size(); i++) {
+//			System.out.println(Arrays.toString(stack.get(i)));
+//		} // => [1, 9] [3, 7] [4, 4]
+
 		
 	} // end of main
 	

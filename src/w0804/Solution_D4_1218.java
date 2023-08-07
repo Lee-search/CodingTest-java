@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Stack;
 
-public class Solution {
+public class Solution_D4_1218 {
 
 	public static void main(String[] args) throws Exception {
 		

@@ -8,7 +8,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
-public class Solution {
+public class Solution_D3_1225 {
 	
 	public static void main(String[] args) throws Exception {
 		System.setIn(new FileInputStream(new File("./src/w0804/input_2.txt")));

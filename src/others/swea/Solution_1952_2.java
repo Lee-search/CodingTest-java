@@ -1,4 +1,4 @@
-package others._pad;
+package others.swea;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  * - 가저조건: 12월까지만 확인
  * - 출력 포멧 맞춰서 출력
  */
-public class Solution {
+public class Solution_1952_2 {
 
     public static int[] tickets = new int[4];
     public static int[] plans = new int[12];
