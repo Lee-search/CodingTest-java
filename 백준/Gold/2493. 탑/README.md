@@ -1,4 +1,4 @@
-![image](https://github.com/Lee-search/java-example/assets/33650294/46b1bb7c-36d9-45fb-87d3-1e52da5f840a)![image](https://github.com/Lee-search/java-example/assets/33650294/ed782cd2-a454-4cb8-88b4-cb7a5cca95f1)![image](https://github.com/Lee-search/java-example/assets/33650294/9c8aef11-e949-44a5-9f5a-cdcb4894b657)# README
+# README
 
 # [Gold V] 탑 - 2493
 
