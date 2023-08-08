@@ -1,12 +1,9 @@
 package w0808;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
-public class Solution {
+public class Solution_1868_non {
 	
 	public static int N;
 	public static char[][] plain;
