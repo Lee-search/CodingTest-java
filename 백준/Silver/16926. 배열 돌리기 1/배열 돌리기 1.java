@@ -37,7 +37,6 @@ public class Main {
 			int start_r = i, start_c = i;
 			int end_r = (N - 1) - i, end_c = (M - 1) - i;
 			
-			
 			// 좌상단 시작 값 미리 저장
 			int temp = plain[start_r][start_c];
 			
@@ -66,13 +65,16 @@ public class Main {
 	} // end of func
 	
 	public static void print() {
+		StringBuilder sb = new StringBuilder();
 		
 		for(int i = 0; i < N; i++) {
 			for(int j = 0; j < M; j++) {
-				System.out.print(plain[i][j] + " ");
+				sb.append(plain[i][j]).append(" ");
 			}
-			System.out.println();
+			sb.append("\n");
 		}
+		
+		System.out.println(sb);
 	} // end of func
 	
 	public static int stoi(String s) {
