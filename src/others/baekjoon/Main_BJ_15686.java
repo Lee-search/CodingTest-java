@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class Main_15686 {
+public class Main_BJ_15686 {
     static int n, m;
     static List<int[]> h_list;
     static List<int[]> c_list;

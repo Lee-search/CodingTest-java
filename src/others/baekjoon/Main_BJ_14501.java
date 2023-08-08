@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main_14501 {
+public class Main_BJ_14501 {
     public static int n;	// n - 1일까지 근무
     public static int[][] workList;
     public static int answer = 0;	// 최대 급여

@@ -6,7 +6,7 @@ package others.baekjoon;
 
 import java.util.*;
 
-public class Main_3190 {
+public class Main_BJ_3190 {
     private static final String ArrayList = null;
 
     public static void main(String[] args) {
