@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Main2 {
+public class Main {
 
     public static void main(String[] args) throws Exception {
 
