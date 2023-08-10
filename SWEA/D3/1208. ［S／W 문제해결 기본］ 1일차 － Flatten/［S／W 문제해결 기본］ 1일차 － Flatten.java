@@ -11,7 +11,7 @@ public class Solution {
 	public static int answer;
 	
 	public static void main(String[] args) throws Exception {
-//		System.setIn(new FileInputStream("src/w0801/input_1.txt"));
+//		System.setIn(new FileInputStream("src/w0801/input_3.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		for(int tc = 1; tc <= 10; tc++) {

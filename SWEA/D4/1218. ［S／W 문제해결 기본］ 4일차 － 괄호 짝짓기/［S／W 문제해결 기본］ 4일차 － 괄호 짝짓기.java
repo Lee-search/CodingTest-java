@@ -8,7 +8,7 @@ public class Solution {
 
 	public static void main(String[] args) throws Exception {
 		
-		//System.setIn(new FileInputStream(new File("./src/w0804/input_1.txt")));
+		//System.setIn(new FileInputStream(new File("./src/w0804/input_3.txt")));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		

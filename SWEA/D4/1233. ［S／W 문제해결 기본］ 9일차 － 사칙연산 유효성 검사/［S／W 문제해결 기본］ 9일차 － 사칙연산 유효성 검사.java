@@ -9,7 +9,7 @@ public class Solution{
 	public static int N;
 	
 	public static void main(String[] args) throws Exception {
-		//System.setIn(new FileInputStream(new File("./src/w0808/input_1.txt")));
+		//System.setIn(new FileInputStream(new File("./src/w0808/input_3.txt")));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = null;
 		StringBuilder sb = new StringBuilder();
