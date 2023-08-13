@@ -1,4 +1,4 @@
-package others.baekjoon.structure;
+package others.baekjoon.data_structure;
 
 /**
  * 큐 2 : https://www.acmicpc.net/problem/18258

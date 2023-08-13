@@ -1,4 +1,4 @@
-package others.baekjoon.structure;
+package others.baekjoon.data_structure;
 
 /**
  * 풍선 터뜨리기 : https://www.acmicpc.net/problem/2346

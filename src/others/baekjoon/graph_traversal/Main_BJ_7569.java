@@ -1,4 +1,4 @@
-package others.baekjoon.graph;
+package others.baekjoon.graph_traversal;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

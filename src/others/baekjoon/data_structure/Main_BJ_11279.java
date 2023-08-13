@@ -1,4 +1,4 @@
-package others.baekjoon.structure;
+package others.baekjoon.data_structure;
 
 /**
  * 최대 힙 : https://www.acmicpc.net/problem/11279
