@@ -1,0 +1,88 @@
+w0731
+	Solution_D3_1289_원재의메모리복구하기.java
+	Main_BJ_17478_재귀함수가뭔가요.java
+w0801
+	Solution_D3_1208_Flatten.java
+	Solution_D4_1210_Ladder.java
+	Solution_D3_2805_농작물수확하기.java
+	Main_BJ_15649_N과M.java
+	Main_BJ_1244_스위치켜고끄기.java   --과제
+w0802
+	 Main_BJ_15650_N과M.java
+	 Main_BJ_11659_구간합구하기4.java
+	 Main_BJ_11660_구간합구하기5.java
+	         백설 공주와 일곱 난쟁이(https://www.acmicpc.net/problem/3040)
+	 Solution_D2_1954_달팽이숫자.java  --과제
+w0803
+     Main_BJ_2961_도영이가만든맛있는음식.java
+     Main_BJ_12891_DNA비밀번호.java
+     Main_BJ_2023_신기한소수찾기.java
+     Solution_D2_2001_파리퇴치.java ---과제
+             집합(https://www.acmicpc.net/problem/11723, 비트연산연습) 
+w0803_car
+	Car.java
+	CarMain.java
+	CarManager.java
+	CarManagerImpl.java
+	NotFoundException.java
+	SameNumberException.java
+	Taxi.java
+w0803_compare
+	Car.java
+	ComparebleTest1.java
+	ComparebleTest2.java
+	StringCompareTest.java
+w0804
+	Solution_D4_1218_괄호짝짓기.java
+	Solution_D3_1225_암호생성기.java
+	Main_BJ_2164_카드2.java  ---과제
+w0807
+    Main_BJ_2493_탑.java 
+    Solution_D3_1228_암호문1.java
+    Main_BJ_1158_요세푸스문제.java
+w0808
+	Solution_1233_사칙연산유효성검사.java
+	Main_BJ_16926_배열돌리기1.java
+	Solution_9229_현빈이와SpotMart.java  --과제
+	SWEA 1952_수영장  --보충
+	SWEA 4008_숫자만들기  --보충
+	SWEA 1868_파핑파핑 지뢰찾기 --보충  
+w0809
+      Main_BJ_16935_배열돌리기3.java
+      Main_BJ_11286_절대값힙.java
+      Solution_D4_1861_정사각형방.java
+      Main_BJ_2563_색종이.java  --과제
+w0810
+	 Solution_D3_5215_햄버거다이어트.java 
+	 Solution_4012_요리사.java
+	 Solution_D3_6808_규영이와인영이의카드게임.java
+	 Main_BJ_17406_배열돌리기4.java  --과제 
+      
+w0811
+	  Main_BJ_2839_설탕배달.java
+	  Main_BJ_16435_스네이크버그.java
+	  Main_BJ_15686_치킨배달.java
+	  Main_BJ_3040_백설공주와일곱난쟁이.java --과제
+w0814
+	 AdjListTest.java  -- debugging 연습
+	 Main_BJ_1074_Z.java
+	 BJ 1629번 곱셈
+	 BJ 2630 색종이
+	 Solution_1953_탈주범검거   --보충 
+	 
+	 
+================================================================
+[디버그]
+F11: Debug모드로 실행하기
+F5:  한 줄씩 진행함.함수이면 안으로 들어가서 한단계씩 실행(step into)
+F6:  한 줄씩 진행하되 함수호출은 건너뜀.함수를 하나의 문장으로 실행(step over)
+F7:  타고들어온 함수가 다 실행되지 않았어도 나머지 다 실행하고 나옴(되돌아 가기)
+F8:  나머지 코드를 다 실행, 다음 break point가 있다면 그쪽으로 이동      
+
+[필요없는 API 건너띄기]
+window --> preference --> 검색(debug)
+       Debug --> step filtering 
+
+[멈출 조건 설정하기]
+break point(오른쪽 버튼) --> breakpoint properties --> conditional(체크)
+ ex) current==3 (필요한 코드 추가)   
