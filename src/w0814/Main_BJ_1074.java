@@ -2,7 +2,6 @@ package w0814;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Main_BJ_1074 {
@@ -23,11 +22,9 @@ public class Main_BJ_1074 {
 		Z(0, 0, (int)Math.pow(2, N));
 	} // end of main
 	
-	public static void Z(int r, int c, int n) {
+	public static void Z(int r, int c, int n_pow) {
 		
-		System.out.println(r + " " + c + " " + n);
-		
-		if(n == 1) {
+		if(n_pow == 2) {
 			
 			for(int i = 0; i < 4; i++) {
 				int nr = r + dr[i];
@@ -37,36 +34,27 @@ public class Main_BJ_1074 {
 					System.exit(0);
 				}
 				count += 1;
-			} // end of for
+			} return;
+		} // end of basis
 			
-			return;
-		} // end of 기저조건
+		// 제곱 승 -= 1
+		n_pow /= 2;
 		
-		int nr = r / 2 + (n / 2);
-		int nc = c / 2 + (n / 2);
-		
-		// 속해있으면 탐색하고 아니면 그냥 count만 계산
-		if(!isCombine(r / 2, c / 2, n / 2)) count += n / 2;
-		else Z(r / 2, c / 2, n / 2);
-		System.out.println("count : " + count);
-		
-		if(!isCombine(r / 2, nc, n / 2)) count += n / 2;
-		else Z(r / 2, nc, n / 2);
-		System.out.println("count : " + count);
-		
-		if(!isCombine(nr, c / 2, n / 2)) count += n / 2;
-		else Z(nr, c / 2, n / 2);
-		System.out.println("count : " + count);
-		
-		if(!isCombine(nr, nc, n / 2)) count += n / 2;
-		else Z(nr, nc, n / 2);
-		System.out.println("count : " + count);
+		// 범위에 포함되면 부분 탐색, 그 외에는 count 만 수행
+		for(int nr : new int[] {r, r + n_pow}) {
+			for(int nc : new int[] {c, c + n_pow}) {
+				if(!isCombine(nr, nc, n_pow)) {
+					count += n_pow * n_pow;
+					continue;
+				}
+				Z(nr, nc, n_pow);
+			}
+		}
 	} // end of func
 	
-	public static boolean isCombine(int r, int c, int n) {
-		System.out.println(r + " <= R < " + (r + n) + " " + c + " <= C < " + (c + n));
-		return (r <= R && R < r + n && c <= C && C < c + n);
-	}
+	public static boolean isCombine(int r, int c, int n_pow) {
+		return (r <= R && R < r + n_pow && c <= C && C < c + n_pow);
+	} // end of func
 	
 	public static int stoi(String s) {
 		return Integer.parseInt(s);
