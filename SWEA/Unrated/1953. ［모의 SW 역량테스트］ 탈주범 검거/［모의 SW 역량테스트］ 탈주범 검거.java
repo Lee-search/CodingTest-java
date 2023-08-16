@@ -1,5 +1,3 @@
-package w0814;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +7,7 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 
-public class Solution_1953 {
+public class Solution {
 	
 	static int N, M, R, C, L, answer;
 	static int[] dr = new int[] {-1, 0, 1, 0};
@@ -20,7 +18,7 @@ public class Solution_1953 {
 	
 	public static void main(String[] args) throws Exception {
 		
-		System.setIn(new FileInputStream(new File("./src/w0814/input.txt")));
+		//System.setIn(new FileInputStream(new File("./src/w0814/input.txt")));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = null;
 		StringBuilder sb = new StringBuilder();
