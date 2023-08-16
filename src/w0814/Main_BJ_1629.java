@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main_BJ_1629 {
 	
 	static int A, B, C;
 	public static void main(String[] args) throws Exception {
