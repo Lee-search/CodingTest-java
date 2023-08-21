@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main_BJ_16987 {
 	
 	static int N, answer;
 	static int[][] eggs;
@@ -41,7 +41,7 @@ public class Main {
 	public static void collision() {
 		
 		int breakSum = 0;	// 깨진 개수
-		int left = 0, right = left + 1;
+		int left = 0, right = 1;
 		if(right == N) return;	// 깨지지 않은 다른 계란 없음
 		
 		while(true) {
@@ -63,9 +63,9 @@ public class Main {
 				right += 1;
 				continue;
 			}
-			
-			leftVal -= rightWgt;
-			rightVal -= leftWgt;
+
+			eggs[selector[left]][0] -= rightWgt;
+			eggs[selector[right]][0] -= leftWgt;
 			
 			if(rightVal == 0) {	// 오른손 계란 X
 				breakSum += 1;
