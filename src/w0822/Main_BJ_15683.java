@@ -10,13 +10,19 @@ import java.util.StringTokenizer;
 
 public class Main_BJ_15683 {
 	
-	static int N, M;
+	static int N, M, answer;
 	static int[][] plain;
-	static boolean[][] visited;
+
+	static int[] selector;
+
 	static List<int[]> cams;
-	
-	static int[] maxArray;
-	
+
+	static int[][] copiedPlain;
+
+	// 1. 중복순열로 가능한 모든 가능성 조회
+	// 2. 앞선 코드에 d로 순회하는 부분만 순열값으로 변경
+	// 3. copy 맵에 순열로 생성한 모든 경우 표시하고 sum 구함
+	// 4. max 값 비교
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,7 +31,7 @@ public class Main_BJ_15683 {
 		N = stoi(st.nextToken());
 		M = stoi(st.nextToken());
 		plain = new int[N][M];
-		visited = new boolean[N][N];
+
 		cams = new ArrayList<>();
 		
 		int wall = 0;	// 벽 개수
@@ -41,120 +47,239 @@ public class Main_BJ_15683 {
 			}
 		} // end of init
 
-		// 각 번호의 카메라가 볼 수 있는 최대 공간 수 저장
-		maxArray = new int[cams.size()];
-		for(int i = 0; i < cams.size(); i++) {
-			camera(i);
-		}
+		selector = new int[cams.size()];	// 카메라 갯수만큼 초기화
+		perm(0);
 		
-		System.out.println(N * M - wall - Arrays.stream(maxArray).sum());
+		System.out.println(N * M - answer - wall);
 	} // end of main
-	
+
+	public static void perm(int cnt) {
+
+		if(cnt == cams.size()) {
+			copiedPlain = new int[N][M];
+			// 카메라 번호에 대해서
+			for(int i = 0; i < cams.size(); i++) {
+//				System.out.println("select:" + Arrays.toString(selector));
+				// 중복순열로 선택된 d 방향으로 탐색 시작
+				camera(i, selector[i]);
+			}
+			return;
+		}
+
+		for(int i = 0; i < 4; i++) {
+			selector[cnt] = i;
+			perm(cnt + 1);
+		}
+	}
+
 	public static int[] dr = {-1, 0, 1, 0};
 	public static int[] dc = {0, 1, 0, -1};
 	
 	// num번째 카메라의 감시할 수 있는 값의 최대 계산
-	public static void camera(int num) {
+	public static void camera(int num, int d) {
 		
 		int sr = cams.get(num)[0];
 		int sc = cams.get(num)[1];
-		int max = 0; // 가능한 최대 탐색 범위 (switch 내부 초기화)
-		
-		int r = sr, c = sc;	// 이동을 위한 지역변수
-		
-		// 중복방지: visited 한 경우 카운트 하지 않고 넘어감
+		int r = sr, c = sc;	// 이동을 위한 지역변수 선언
+
 		switch(plain[sr][sc]) {
 		case 1:
-			for(int i = 0; i < 4; i++) {
-				r = sr; c = sc;
-				int sum = 0;	// 현재 탐색한 블럭 수
-				do {
-					sum += 1;
-					r = r + dr[i];
-					c = c + dc[i];
-				} while(isPossible(r, c));
-				
-				max = Math.max(max, sum);
-			}
+			do {
+				// 카피한 평면에 카메라가 촬영하는 범위 표기
+				copiedPlain[r][c] = 1;
+				r = r + dr[d];
+				c = c + dc[d];
+			} while(isPossible(r, c));
 			break;
+
 		case 2:
-			for(int[] ds : new int[][] {{0, 2},{1, 3}}) {
-				r = sr; c = sc;
-				int sum = 0;	// 현재 탐색한 블럭 수
+			if(d == 0 || d == 2) {
 				do {
-					sum += 1;
-					r = r + dr[ds[0]];
-					c = c + dc[ds[0]];
+					copiedPlain[r][c] = 1;
+					r = r + dr[0];
+					c = c + dc[0];
 				} while(isPossible(r, c));
 				r = sr; c = sc;
 				do {
-					sum += 1;
-					r = r + dr[ds[1]];
-					c = c + dc[ds[1]];
+					copiedPlain[r][c] = 1;
+					r = r + dr[2];
+					c = c + dc[2];
 				} while(isPossible(r, c));
-				
-				max = Math.max(max, sum);
+			}
+
+			else {
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[1];
+					c = c + dc[1];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[3];
+					c = c + dc[3];
+				} while(isPossible(r, c));
 			}
 			break;
+
 		case 3:
-			for(int[] ds : new int[][] {{0, 1},{1, 2},{2, 3},{3, 0}}) {
-				
-				int sum = 0;	// 현재 탐색한 블럭 수
-				r = sr; c = sc;
+
+			if(d == 0) {
 				do {
-					sum += 1;
-					r = r + dr[ds[0]];
-					c = c + dc[ds[0]];
+					copiedPlain[r][c] = 1;
+					r = r + dr[0];
+					c = c + dc[0];
 				} while(isPossible(r, c));
 				r = sr; c = sc;
 				do {
-					sum += 1;
-					r = r + dr[ds[1]];
-					c = c + dc[ds[1]];
+					copiedPlain[r][c] = 1;
+					r = r + dr[1];
+					c = c + dc[1];
 				} while(isPossible(r, c));
-				
-				max = Math.max(max, sum);
+			}
+			else if(d == 1) {
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[1];
+					c = c + dc[1];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[2];
+					c = c + dc[2];
+				} while(isPossible(r, c));
+			}
+			else if(d == 2) {
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[2];
+					c = c + dc[2];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[3];
+					c = c + dc[3];
+				} while(isPossible(r, c));
+			}
+			else {
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[3];
+					c = c + dc[3];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[0];
+					c = c + dc[0];
+				} while(isPossible(r, c));
 			}
 			break;
+
 		case 4:
-			for(int[] ds : new int[][] {{0,1,2},{1,2,3},{2,3,0},{3,0,1}}) {
-				
-				int sum = 0;	// 현재 탐색한 블럭 수
-				r = sr; c = sc;
+
+			if(d == 0) {
 				do {
-					sum += 1;
-					r = r + dr[ds[0]];
-					c = c + dc[ds[0]];
+					copiedPlain[r][c] = 1;
+					r = r + dr[3];
+					c = c + dc[3];
 				} while(isPossible(r, c));
 				r = sr; c = sc;
 				do {
-					sum += 1;
-					r = r + dr[ds[1]];
-					c = c + dc[ds[1]];
+					copiedPlain[r][c] = 1;
+					r = r + dr[0];
+					c = c + dc[0];
 				} while(isPossible(r, c));
 				r = sr; c = sc;
 				do {
-					sum += 1;
-					r = r + dr[ds[2]];
-					c = c + dc[ds[2]];
+					copiedPlain[r][c] = 1;
+					r = r + dr[1];
+					c = c + dc[1];
 				} while(isPossible(r, c));
-				
-				max = Math.max(max, sum);
+			}
+			else if(d == 1) {
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[0];
+					c = c + dc[0];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[1];
+					c = c + dc[1];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[2];
+					c = c + dc[2];
+				} while(isPossible(r, c));
+			}
+			else if(d == 2) {
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[1];
+					c = c + dc[1];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[2];
+					c = c + dc[2];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[3];
+					c = c + dc[3];
+				} while(isPossible(r, c));
+			}
+			else {
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[2];
+					c = c + dc[2];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[3];
+					c = c + dc[3];
+				} while(isPossible(r, c));
+				r = sr; c = sc;
+				do {
+					copiedPlain[r][c] = 1;
+					r = r + dr[0];
+					c = c + dc[0];
+				} while(isPossible(r, c));
 			}
 			break;
-		case 5:	
+
+		case 5:
 			for(int i = 0; i < 4; i++) {
 				r = sr; c = sc;
 				do {
-					max += 1;
+					copiedPlain[r][c] = 1;
 					r = r + dr[i];
 					c = c + dc[i];
 				} while(isPossible(r, c));
 			}
 			break;
 		}
-		
-		maxArray[num] = Math.max(maxArray[num], max);
+
+		int sum = 0;
+		for(int i = 0; i < N; i++) {
+//			System.out.println(Arrays.toString(copiedPlain[i]));
+			sum += Arrays.stream(copiedPlain[i]).sum();
+		}
+
+//		System.out.println();
+
+//		System.out.println("sum: " + sum);
+		answer = Math.max(answer, sum);
 	} // end of func
 	
 	// 범위 밖 또는 벽을 만나면 false 리턴
