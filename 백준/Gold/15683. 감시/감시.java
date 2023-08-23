@@ -29,6 +29,7 @@ public class Main {
 	static int[][] maps;
 	static ArrayList<Cctv> cctvs = new ArrayList<>();
 	static int minVal = Integer.MAX_VALUE;
+	static int cnt;
 
 	/** initialize */
 	public static void initial() throws Exception {
@@ -36,6 +37,7 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		maps = new int[N + 2][M + 2];
+		cnt = N * M;
 		int n;
 		for (int i = 0; i < N + 2; i++) {
 			maps[i][0] = 6;
@@ -50,8 +52,12 @@ public class Main {
 			for (int j = 1; j < M + 1; j++) {
 				n = Integer.parseInt(st.nextToken());
 				maps[i][j] = n;
-				if (n != 0 && n != 6)
+				if (n == 6)
+					cnt--;
+				else if (n != 0) {
 					cctvs.add(new Cctv(i, j, n));
+					cnt--;
+				}
 			}
 		}
 	}
@@ -60,33 +66,38 @@ public class Main {
 	static int[] dC = { 0, 0, -1, 1 };
 
 	/** up down left right cctv search */
-	public static int[][] search(int r, int c, int dir, int[][] nMaps) {
-		int nr = r;
-		int nc = c;
-		int dr = dR[dir];
-		int dc = dC[dir];
-		while (nMaps[nr][nc] != 6) {
-			if (nMaps[nr][nc] == 0)
-				nMaps[nr][nc] = '#';
-			nr += dr;
-			nc += dc;
-		}
-		return nMaps;
-	}
-
-	public static int[][] copyArray(int[][] nMaps) {
-		return Arrays.stream(nMaps).map(x -> Arrays.copyOf(x, x.length)).toArray(int[][]::new);
-	}
-
-	public static void dfs(int depth, int[][] nMaps) {
-		if (depth == cctvs.size()) {
-			int val = 0;
-			for (int i = 1; i < N + 1; i++) {
-				for (int j = 1; j < M + 1; j++) {
-					if (nMaps[i][j] == 0)
-						val++;
-				}
+	public static int search(int r, int c, int[] dirs, boolean willOn) {
+		int v = 0;
+		int nr, nc, dr, dc;
+		int identifier = 10 * r + c;
+		for (int dir : dirs) {
+			dr = dR[dir];
+			dc = dC[dir];
+			nr = r + dr;
+			nc = c + dc;
+			while (maps[nr][nc] != 6) {
+				if (willOn && maps[nr][nc] == 0) {
+					v++;
+					maps[nr][nc] = identifier;
+				} else if (!willOn && maps[nr][nc] == identifier)
+					maps[nr][nc] = 0;
+				nr += dr;
+				nc += dc;
 			}
+		}
+		return v;
+	}
+
+//	public static int[][] copyArray(int[][] nMaps) {
+//		return Arrays.stream(nMaps).map(x -> Arrays.copyOf(x, x.length)).toArray(int[][]::new);
+//	}
+
+	static int[][][] d = new int[][][] { { { 0 }, { 1 }, { 2 }, { 3 } }, { { 0, 1 }, { 2, 3 } },
+			{ { 0, 2 }, { 0, 3 }, { 1, 2 }, { 1, 3 } }, { { 0, 1, 2 }, { 1, 2, 3 }, { 2, 3, 0 }, { 3, 0, 1 } },
+			{ { 0, 1, 2, 3 } } };
+
+	public static void dfs(int depth, int val) {
+		if (depth == cctvs.size()) {
 			minVal = Math.min(minVal, val);
 			return;
 		}
@@ -94,46 +105,17 @@ public class Main {
 		int t = cctv.type;
 		int r = cctv.r;
 		int c = cctv.c;
-		int[][] cMaps = copyArray(nMaps);
-		if (t == 1) {
-			dfs(depth + 1, search(r, c, 0, cMaps));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 1, cMaps));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 2, cMaps));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 3, cMaps));
-		} else if (t == 2) {
-			dfs(depth + 1, search(r, c, 0, search(r, c, 1, cMaps)));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 2, search(r, c, 3, cMaps)));
-		} else if (t == 3) {
-			dfs(depth + 1, search(r, c, 0, search(r, c, 2, cMaps)));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 0, search(r, c, 3, cMaps)));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 1, search(r, c, 2, cMaps)));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 1, search(r, c, 3, cMaps)));
-		} else if (t == 4) {
-			dfs(depth + 1, search(r, c, 0, search(r, c, 1, search(r, c, 2, cMaps))));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 1, search(r, c, 2, search(r, c, 3, cMaps))));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 2, search(r, c, 3, search(r, c, 0, cMaps))));
-			cMaps = copyArray(nMaps);
-			dfs(depth + 1, search(r, c, 3, search(r, c, 0, search(r, c, 1, cMaps))));
-		} else if (t == 5) {
-			dfs(depth + 1, search(r, c, 0, search(r, c, 1, search(r, c, 2, search(r, c, 3, cMaps)))));
+		for (int[] dirs : d[t - 1]) {
+			dfs(depth + 1, val - search(r, c, dirs, true));
+			search(r, c, dirs, false);
 		}
 	}
 
 	/** print map */
-	public static void printMap(int[][] nMaps) {
-		for (int i = 0; i < N + 2; i++) {
-			for (int j = 0; j < M + 2; j++) {
-
-				System.out.print(nMaps[i][j] + " ");
+	public static void printMap() {
+		for (int i = 1; i < N + 1; i++) {
+			for (int j = 1; j < M + 1; j++) {
+				System.out.print(maps[i][j] + " ");
 			}
 			System.out.println();
 		}
@@ -141,7 +123,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		initial();
-		dfs(0, maps);
+		dfs(0, cnt);
 		System.out.println(minVal);
 	}
 }
