@@ -1,102 +1,115 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
 
-	static ArrayList<Integer> comb;
-	static int N;
-	static int[] people;
-	static ArrayList<int[]> edges = new ArrayList<>();
-	static boolean[] visited;
-	static Deque<Integer> que = new ArrayDeque<>();
+    static int N, answer;
+    static int[] population;	// 마을 주민 수
+    static List<Integer>[] adjList;
 
-	/** initialize */
-	public static void initial() throws Exception {
-		N = Integer.parseInt(br.readLine());
-		people = new int[N + 1];
-		st = new StringTokenizer(br.readLine());
-		for (int i = 1; i < N + 1; i++) {
-			people[i] = Integer.parseInt(st.nextToken());
-		}
-		int[] linked;
-		int size;
-		edges.add(new int[0]);
-		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
-			size = Integer.parseInt(st.nextToken());
-			linked = new int[size];
-			for (int j = 0; j < size; j++) {
-				linked[j] = Integer.parseInt(st.nextToken());
-			}
-			edges.add(linked);
-		}
-	}
+    // for SubSet
+    static boolean[] isSelected;
 
-	static int minVal = Integer.MAX_VALUE;
+    public static void main(String[] args) throws IOException {
 
-	public static void combination() {
-		int p1, p2;
-		for (int i = 1; i < (1 << N >> 1); i++) {
-			p1 = isConnect(i);
-			p2 = isConnect(((1 << N) - 1) ^ i);
-//			System.out.printf("%d %d\n", p1, p2);
-			if (p1 != -1 && p2 != -1)
-				minVal = Math.min(minVal, Math.abs(p1 - p2));
-		}
-	}
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = null;
 
-	/** BFS */
-	public static int isConnect(int comb) {
+        N = stoi(br.readLine());
+        population = new int[N + 1];
+        answer = Integer.MAX_VALUE; // 최소가 되는 정답 위해 최대로 초기화
 
-		int cnt = 1;
-		int p = 0;
-		int n = 1 << N - 1;
-		int first = N;
-		while ((n & comb) != 1 << (first - 1) && first != 0) {
-			first--;
-			n >>= 1;
-		}
-		que.add(first);
-		int visited = 1 << (first - 1);
-		p += people[first];
-		int val = 0;
-		while (!que.isEmpty()) {
-			n = que.poll();
-			for (int l : edges.get(n)) {
-				val = 1 << (l - 1);
-				if ((val & comb) == val && (visited & val) == 0) {
-					cnt++;
-					p += people[l];
-					visited |= val;
-					que.add(l);
-				}
-			}
-		}
-		if (cnt == count1(comb))
-			return p;
-		else
-			return -1;
-	}
+        st = new StringTokenizer(br.readLine());
+        for(int i = 1; i <= N; i++) {
+            population[i] = stoi(st.nextToken());
+        }
 
-	/** 1의 개수 */
-	public static int count1(int num) {
-		int cnt = 0;
-		for (cnt = 0; num != 0; cnt++) {
-			num &= (num - 1);
-		}
-		return cnt;
-	}
+        // 1 ~ N번 마을까지의 연결 정보 저장
+        adjList = new List[N + 1];
+        for(int i = 0; i <= N; i++) adjList[i] = new ArrayList<>();
 
-	public static void main(String[] args) throws Exception {
-		initial();
-		combination();
-		System.out.println(minVal == Integer.MAX_VALUE ? -1 : minVal);
-	}
+        for(int i = 1; i <= N; i++) {
+
+            st = new StringTokenizer(br.readLine());
+            int adjCnt = stoi(st.nextToken());  // 인접 구역의 수
+
+            for(int j = 0; j < adjCnt; j++) {
+                adjList[i].add(stoi(st.nextToken()));
+            }
+        } // end of init
+
+        //for(int i = 0; i <= N; i++) System.out.println(adjList[i]);
+
+        // 임의로 두개 선거구로 분할
+        // 주의: subset은 리스트 0부터 시작
+        isSelected = new boolean[N];
+        SubSet(0);
+
+        System.out.println(answer == Integer.MAX_VALUE ? -1 : answer);
+    } // end of main
+
+    public static void SubSet(int cnt) {
+
+        List<Integer> groupA = new ArrayList<>();
+        List<Integer> groupB = new ArrayList<>();
+        if(cnt == N) {
+
+            for(int i = 0; i < N; i++) {
+                if(isSelected[i]) groupA.add(i + 1);
+                else groupB.add(i + 1);
+            }
+
+            // 한 선거구 내에는 최소 한개의 마을이 있어야함
+            if(groupA.size() == 0 || groupB.size() == 0) return;
+
+            // 같은 선거구인데 연결되지 않으면 안됨
+            if(isConnected(groupA) && isConnected(groupB)) {
+                // A, B 선거구의 인구수의 차이 계산
+                int sumA = 0, sumB = 0;
+                for(int i : groupA) sumA += population[i];
+                for(int i : groupB) sumB += population[i];
+                answer = Math.min(answer, Math.abs(sumA - sumB));
+            }
+
+            return;
+        } // basis
+
+        isSelected[cnt] = false;
+        SubSet(cnt + 1);
+        isSelected[cnt] = true;
+        SubSet(cnt + 1);
+    } // end of subset
+
+    public static boolean isConnected(List<Integer> list) {
+
+        Queue<Integer> q = new ArrayDeque<>();
+        boolean[] visited = new boolean[N + 1];
+        int count = 0; // BFS 순회하며 방문한 간선의 갯수
+
+        q.add(list.get(0));
+        visited[list.get(0)] = true;
+
+        while(!q.isEmpty()) {
+            int current = q.poll();
+
+            for(int i = 0; i < adjList[current].size(); i++) {
+
+                int next = adjList[current].get(i);
+                if(!visited[next] && list.contains(next)) {
+                    q.add(next);
+                    visited[next] = true;
+                    count += 1;
+                }
+            }
+        } // end of while
+
+        // 선거구 내 마을 수와 방문한 마을 수가 같다면 true
+        return count == list.size() - 1;
+    } // end of BFS
+
+    public static int stoi(String s) {
+        return Integer.parseInt(s);
+    } // end of stoi
 }
