@@ -43,7 +43,7 @@ public class Main {
 
 	public static void combination() {
 		int p1, p2;
-		for (int i = 1; i < (1 << N) - 1; i++) {
+		for (int i = 1; i < (1 << N >> 1); i++) {
 			p1 = isConnect(i);
 			p2 = isConnect(((1 << N) - 1) ^ i);
 //			System.out.printf("%d %d\n", p1, p2);
