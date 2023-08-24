@@ -4,90 +4,85 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Solution {
 	
 	static int N, answer;
 	static int[][] plain;
-	
-	static int coreCnt;
-	static List<int[]> cores;
-	
-	static int[] selector;
+
+	static List<int[]> coreList;
+
 	static boolean[] isSelected;
 	
 	public static void main(String[] args) throws Exception {
-		
+
 		System.setIn(new FileInputStream(new File("./src/w0824/input.txt")));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = null;
 		StringBuilder sb = new StringBuilder();
 		
 		int T = stoi(br.readLine());
-		for(int testCase = 1; testCase <= 3; testCase++) {
+		for(int testCase = 1; testCase <= T; testCase++) {
 			
 			N = stoi(br.readLine());
 			plain = new int[N][N];
-			cores = new ArrayList<>();
-			answer = Integer.MAX_VALUE;
-			
+			coreList = new ArrayList<>();
+
 			for(int i = 0; i < N; i++) {
 				st = new StringTokenizer(br.readLine());
 				for(int j = 0; j < N; j++) {
 					plain[i][j] = stoi(st.nextToken());
 					if(plain[i][j] == 1) {
-						
-						coreCnt += 1; // 코어 갯수 저장
-						// 이미 가장자리에 있어서 전원이 들어오는 코어 pass
+						// 가장자리 유닛 제외
 						if(i == 0 || i == N - 1 || j == 0 || j == N - 1) continue;
-						cores.add(new int[] {i, j});
-						
+						coreList.add(new int[] {i, j});
 					}
 				}
 			} // end of init
+
+			answer = Integer.MAX_VALUE;
+			isSelected = new boolean[coreList.size()];
 			
-//			System.out.println("---Cores---");
-//			for(int i = 0; i < cores.size(); i++) 
-//				System.out.print(Arrays.toString(cores.get(i)) + ", ");
-//			System.out.println();
-			
-			// 1. 코어 배열 순서를 순열로 나열
-			isSelected = new boolean[cores.size()];
-			selector = new int[cores.size()];	
-			permutation(0);
-			
+			// 코어 배열 순서를 조합으로 나열
+			for(int i = coreList.size(); i >= 0; i--) {
+				combination(0, 0, i);
+				if(answer != Integer.MAX_VALUE) break; // 최솟값이 갱신되면 종료
+			}
+
 			sb.append("#").append(testCase).append(" ").append(answer).append("\n");
 		} // end of tc
 		
 		System.out.println(sb);
 	} // end of main
-	
-	public static void permutation(int cnt) {
+
+	/**
+	 * N개의 코어 중 R개를 선택하는 조합 생성
+	 * @param cnt
+	 * @param start
+	 * @param r
+	 */
+	public static void combination(int cnt, int start, int r) {
 		
-		if(cnt == cores.size()) {
+		if(cnt == r) {
 			// 코어를 뽑는 해당 경우에 대해 DFS 탐색
 			DFS(0);
 			return;
 		} // basis
 		
-		for(int i = 0; i < cores.size(); i++) {
-			if(isSelected[i]) continue;
+		for(int i = start; i < coreList.size(); i++) {
 			
 			isSelected[i] = true;
-			selector[cnt] = i;
-			permutation(cnt + 1);
+			combination(cnt + 1, i + 1, r);
 			isSelected[i] = false;
 		}
 	}
 
 	/**
-	 * @return 연결한 전선의 갯수 
+	 * @return 연결한 전선의 갯수
 	 */
 	public static int getWires() {
 		
@@ -95,22 +90,25 @@ public class Solution {
 		for(int i = 0; i < N; i++) {
 			cnt += Arrays.stream(plain[i]).sum();
 		}
-		return cnt - coreCnt;
+		return cnt - N;
 	}
 	
 	/**
 	 * cnt번째 코어에 대해서 DFS 탐색
-	 * @param cnt : permutation으로 선택된 코어 번호
+	 * @param cnt : combination 으로 선택된 코어 번호
 	 */
 	public static void DFS(int cnt) {
-		
-		if(cnt == cores.size()) {
+
+		// cnt가 지정한 r만큼 도달했으면 연결된 코어 수 구하고 return
+		if(cnt == coreList.size()) {
 			answer = Math.min(answer, getWires());
 			return;
 		} // basis
-		
-		
-		int[] core = cores.get(cnt);
+
+		// 조합에서 선택되지 않았으면 다음 코어에 대해 탐색
+		if(!isSelected[cnt]) DFS(cnt + 1);
+
+		int[] core = coreList.get(cnt);
 		int r = core[0];
 		int c = core[1];
 		
@@ -196,8 +194,6 @@ public class Solution {
 		for(int nc = pos; nc < c; nc++) {
 			plain[r][nc] = 0;	// 다시 0으로 복구
 		}
-		
-		DFS(cnt + 1);
 	}
 	
 	public static int stoi(String s) {
