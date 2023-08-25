@@ -1,119 +1,137 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int N, answer = 0;
-	static int[][] infoList;
-	
-	static boolean[] isSelected;
-	static int[] selector;
-	
-	public static void main(String[] args) throws Exception {
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
-		
-		N = stoi(br.readLine());
-		infoList = new int[N][9];	// N번째 이닝에 1~9번 플레이어의 정보 저장
-		
-		for(int i = 0; i < N; i++) {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringBuilder sb = new StringBuilder();
+	static StringTokenizer st;
+
+	static int N;
+	static boolean[] visited;
+	static int[][] maps;
+	static int[] per;
+	static boolean[] ru;
+	static int now;
+	static int score;
+	static int maxScore;
+
+	/** initialize */
+	public static void initial() throws Exception {
+		N = Integer.parseInt(br.readLine());
+		maps = new int[N][9];
+		visited = new boolean[10];
+		per = new int[9];
+		ru = new boolean[4];
+		now = 0;
+		score = 0;
+		maxScore = 0;
+		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-			for(int p = 0; p < 9; p++) {
-				infoList[i][p] = stoi(st.nextToken());
+			for (int j = 0; j < 9; j++) {
+				maps[i][j] = Integer.parseInt(st.nextToken());
 			}
-		} // end of init
-		
-		isSelected = new boolean[9];
-		selector = new int[9];
-		
-		permutation(0);
-		System.out.println(answer);
-		
-	} // end of main
-	
-	public static void permutation(int cnt) {
-		
-		if(cnt == 9) {
-			if(selector[3] == 0) {	// 4번타자는 1번
-				//System.out.println(Arrays.toString(selector));
-				play();
-			}
+		}
+	}
+
+	static void permutation(int depth) {
+		if (depth == 9) {
+			score = 0;
+			now = 0;
+			play();
+			maxScore = Math.max(maxScore, score);
 			return;
-		} // basis
-		
-		for(int i = 0; i < 9; i++ ) {
-			
-			if(isSelected[i]) continue;
-			
-			isSelected[i] = true;
-			selector[cnt] = i;
-			permutation(cnt + 1);
-			isSelected[i] = false;
 		}
-	}
-	
-	public static void play() {
-		
-		int player = 0;	// 플레이어 정보
-		int score = 0;
-		int result;
-		
-		for(int i = 0; i < N; i++) {
-			int outCnt = 0;
-			Queue<Integer> ground = new ArrayDeque<>();
-			ground.offer(0);	// 3루
-			ground.offer(0);	// 2루
-			ground.offer(0);	// 1루
-			
-			while(outCnt < 3) {
-				
-				// 해당 플레이어의 결과
-				result = infoList[i][selector[player]];
-				//System.out.println(i + "번째 이닝의 " + player + "번타자" + selector[player] + "의 결과: " + result);
-				
-				if(result == 0) outCnt += 1;
-				else if(result == 1) {
-					score += ground.poll();
-					ground.offer(1);
+		if (depth == 3) {
+			per[3] = 0;
+			permutation(depth + 1);
+		} else {
+			for (int i = 1; i < 9; i++) {
+				if (!visited[i]) {
+					visited[i] = true;
+					per[depth] = i;
+					permutation(depth + 1);
+					visited[i] = false;
 				}
-				else if(result == 2) {
-					score += ground.poll();
-					score += ground.poll();
-					ground.offer(1);
-					ground.offer(0);
-				}
-				else if(result == 3) {
-					score += ground.poll();
-					score += ground.poll();
-					score += ground.poll();
-					ground.offer(1);
-					ground.offer(0);
-					ground.offer(0);
-				}
-				else if(result == 4) {
-					score += 1;
-					score += ground.poll();
-					score += ground.poll();
-					score += ground.poll();
-					ground.offer(0);
-					ground.offer(0);
-					ground.offer(0);
-				}
-				
-				// 다음 플레이어 이동
-				player = (player + 1) % 9;
 			}
 		}
-		
-		answer = Math.max(answer, score);
 	}
-	
-	public static int stoi(String s) {
-		return Integer.parseInt(s);
-	} // end of stoi
+
+	static void play() {
+		int inning = 0;
+		while (inning < N) {
+			oneInning(inning);
+			inning++;
+		}
+	}
+
+	static void oneInning(int inning) {
+		int outCnt = 0;
+		int ta;
+		while (outCnt != 3) {
+			now %= 9;
+			ta = maps[inning][per[now]];
+			outCnt += oneTa(ta);
+			now++;
+		}
+		ru = new boolean[4];
+	}
+
+	static int oneTa(int ta) {
+		switch (ta) {
+		case 0:
+			return 1;
+		case 1:
+			ru[0] = true;
+			if (ru[3])
+				score++;
+			for (int i = 2; i >= 0; i--) {
+				ru[i + 1] = ru[i];
+			}
+			ru[0] = false;
+			return 0;
+		case 2:
+			if (ru[2])
+				score++;
+			if (ru[3])
+				score++;
+			ru[3] = false;
+			if (ru[1]) {
+				ru[3] = true;
+				ru[1] = false;
+			}
+			
+			ru[2] = true;
+			return 0;
+		case 3:
+			if (ru[1])
+				score++;
+			if (ru[2])
+				score++;
+			if (ru[3])
+				score++;
+			ru = new boolean[4];
+			ru[1] = false;
+			ru[2] = false;
+			ru[3] = true;
+			return 0;
+		case 4:
+			ru[0] = true;
+			for (boolean b : ru) {
+				if (b)
+					score++;
+			}
+			ru = new boolean[4];
+			return 0;
+		default:
+			return 0;
+		}
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		initial();
+		permutation(0);
+		System.out.println(maxScore);
+	}
 }
