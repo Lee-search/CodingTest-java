@@ -2,14 +2,9 @@ package w0818;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.*;
 
-public class Main_BJ_17135 {
+public class Main_BJ_17135_non {
 	
 	static int N, M, D, answer;
 	static int[][] plain, dump;
@@ -72,12 +67,9 @@ public class Main_BJ_17135 {
 		List<int[]> list = new ArrayList<>();
 		
 		while(enemiCnt > 0) {
-			
-			list  = new ArrayList<>();
-			
-			for(int i = 0; i < M; i++) { // R, C, 이동거리
+
+			for(int i = 0; i < M; i++) // R, C, 이동거리
 				if(isSelected[i]) q.offer(new int[] {N - 1, i, 1});
-			} System.out.println(Arrays.toString(isSelected));
 			
 			while(!q.isEmpty()) {
 				
@@ -86,11 +78,13 @@ public class Main_BJ_17135 {
 				
 				if(dist > D) continue;	// 발사 가능한 최대 거리 초과
 				
-				if(plain[r][c] == 1) { // shoot!
+				if(plain[r][c] == 1) {
+					for(int i = 0; i < list.size(); i++) {
+						if(list.get(i)[0] == r && list.get(i)[1] == c) continue;
+					}
 					list.add(new int[] {r, c});
-					System.out.println(r + " " + c  + " " + dist);
 				}
-				
+
 				for(int i = 0; i < 3; i++) {
 					int nr = r + dr[i], nc = c + dc[i];
 					if(isPossible(nr, nc)) {
@@ -104,13 +98,15 @@ public class Main_BJ_17135 {
 				int r = list.get(i)[0];
 				int c = list.get(i)[1];
 				
-				if(plain[r][c] == 0) continue;
-				plain[r][c] = 0;
-				sum += 1;
-				enemiCnt -= 1;
+				if(plain[r][c] == 1) {
+					plain[r][c] = 0;
+					sum += 1;
+					enemiCnt -= 1;
+				}
 			}
 			
 			move();
+			list  = new ArrayList<>();
 		}
 		
 		answer = Math.max(answer, sum);
@@ -118,7 +114,7 @@ public class Main_BJ_17135 {
 	
 	// 3. 궁수가 화살 쏜 후 적 전진
 	public static void move() {
-		
+
 		for(int i = N - 1; i >= 0; i--) {
 			for(int j = 0; j < M; j++) {
 				if(plain[i][j] == 1) {
@@ -146,7 +142,7 @@ public class Main_BJ_17135 {
 		}
 		enemiCnt = dumpCnt;
 	} // end of func
-	
+
 	public static int getDist(int r1, int c1, int r2, int c2) {
 		return Math.abs(r1 - r2) + Math.abs(c1 - c2);
 	} // end of func
