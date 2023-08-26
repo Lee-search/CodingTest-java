@@ -6,7 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main_BJ_7569 {
+public class Main_BJ_7576 {
 	
 	public static int N, M;
 	public static int count, answer;
