@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Main_BJ_17135_non {
+public class Main_BJ_17135_unsolved {
 	
 	static int N, M, D, answer;
 	static int[][] plain, dump;
