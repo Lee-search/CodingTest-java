@@ -1,206 +1,165 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
-class Shark {
-	int r;
-	int c;
-	int s; // 속도
-	int d; // 위 아래 오른쪽 왼 1, 2, 3, 4
-	int z; // 크기
-
-	public Shark(int r, int c, int s, int d, int z) {
-		super();
-		this.r = r;
-		this.c = c;
-		this.s = s;
-		this.d = d;
-		this.z = z;
-	}
-}
-
-class Sharks {
-	private ArrayList<Shark> list;
-
-	public Sharks() {
-		list = new ArrayList<>();
-	}
-
-	public void add(Shark s) {
-		list.add(s);
-	}
-
-	public boolean isEmpty() {
-		return list.isEmpty();
-	}
-
-	public void remove(Shark s) {
-		list.remove(s);
-	}
-
-	public ArrayList<Shark> max() {
-		if (list.isEmpty())
-			return list;
-		ArrayList<Shark> ret = new ArrayList<>();
-		list.sort((Shark s1, Shark s2) -> {
-			return s2.z - s1.z;
-		});
-		Shark maxS = list.get(0);
-		list.remove(0);
-		for (Shark s : list)
-			ret.add(s);
-		list.clear();
-		list.add(maxS);
-		return ret;
-	}
-
-	public Shark getShark() {
-		return list.get(0);
-	}
-
-	public void initial() {
-		list.clear();
-	}
-}
-
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
 
-	static int R, C, M;
-	static ArrayList<Shark> sharks = new ArrayList<>();
-	static Sharks[][] maps;
+    static int R, C, M, answer;
+    static int[][] plain, nextPlain;
+    static List<Shark> sharkList;
 
-	/** initialize */
-	public static void initial() throws Exception {
-		st = new StringTokenizer(br.readLine());
-		R = Integer.parseInt(st.nextToken());
-		C = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		maps = new Sharks[R + 1][C + 1];
-		for (int i = 1; i < R + 1; i++) {
-			for (int j = 1; j < C + 1; j++) {
-				maps[i][j] = new Sharks();
-			}
-		}
-		int r, c;
-		for (int i = 1; i < M + 1; i++) {
-			st = new StringTokenizer(br.readLine());
-			r = Integer.parseInt(st.nextToken());
-			c = Integer.parseInt(st.nextToken());
-			Shark s = new Shark(r, c, Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
-					Integer.parseInt(st.nextToken()));
-			sharks.add(s);
-			maps[r][c].add(s);
-		}
-	}
+    static class Shark {
 
-	/** sharks all move one second */
-	public static void oneSecond() {
-		for (Shark s : sharks) {
-			maps[s.r][s.c].remove(s);
-			move(s);
-			maps[s.r][s.c].add(s);
-		}
-		ArrayList<Shark> l;
-		for (int i = 1; i < R + 1; i++) {
-			for (int j = 1; j < C + 1; j++) {
-				l = maps[i][j].max();
-				for (Shark s : l) {
-					sharks.remove(s);
-				}
-			}
-		}
-	}
+        int r, c, s, d, z;
+        boolean alive = true;   // 상어 생존 여부 저장
+        public Shark(int r, int c, int s, int d, int z) {
+            this.r = r;
+            this.c = c;
+            this.s = s;
+            this.d = d;
+            this.z = z;
+        }
 
-	// r, c 속도, 방향
-	public static void move(Shark s) {
-		int turn;
-		if (s.d == 4) {
-			turn = s.s % (2 * (C - 1));
-			if (turn <= s.c - 1) {
-				s.c = s.c - turn;
-			} else if (turn <= C + s.c - 2) {
-				s.c = 1 + turn - (s.c - 1);
-				s.d = 3;
-			} else {
-				s.c = 2 * C - turn + s.c - 2;
-			}
-		}
+//        @Override
+//        public String toString() {
+//            return String.format("상어위치 R: %d, C: %d, 속도: %d, 방향: %d", r, c, s, d);
+//        }
+    }
 
-		// 2, 3 작업중
-		else if (s.d == 3) {
-			turn = s.s % (2 * (C - 1));
-			if (turn <= C - s.c)
-				s.c = s.c + turn;
-			else if (turn <= 2 * C - s.c - 1) {
-				s.c = 2 * C - s.c - turn;
-				s.d = 4;
-			} else
-				s.c = s.c + turn - 2 * C + 2;
-		}
+    public static void main(String[] args) throws Exception {
 
-		else if (s.d == 1) {
-			turn = s.s % (2 * (R - 1));
-			if (turn <= s.r - 1) {
-				s.r = s.r - turn;
-			} else if (turn <= R + s.r - 2) {
-				s.r = 1 + turn - (s.r - 1);
-				s.d = 2;
-			} else {
-				s.r = 2 * R - turn + s.r - 2;
-			}
-		}
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-		else if (s.d == 2) {
-			turn = s.s % (2 * (R - 1));
-			if (turn <= R - s.r)
-				s.r = s.r + turn;
-			else if (turn <= 2 * R - s.r - 1) {
-				s.r = 2 * R - s.r - turn;
-				s.d = 1;
-			} else
-				s.r = s.r + turn - 2 * R + 2;
-		}
-	}
+        R = stoi(st.nextToken());
+        C = stoi(st.nextToken());
+        M = stoi(st.nextToken());   // 상어의 수
 
-	public static int getShark(int c) {
-		int r = 1;
-		while (r <= R && maps[r][c].isEmpty()) {
-			r++;
-		}
-		if (r == R + 1)
-			return 0;
-		else {
-			Shark ret = maps[r][c].getShark();
-			maps[r][c].initial();
-			sharks.remove(ret);
-			return ret.z;
-		}
-	}
+        plain = new int[R + 1][C + 1];
+        sharkList = new ArrayList<>();
 
-	public static void printMap() {
-		for (int i = 1; i < R + 1; i++) {
+        for(int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
 
-			for (int j = 1; j < C + 1; j++) {
-				System.out.printf("%d  ", maps[i][j].isEmpty() ? 0 : maps[i][j].getShark().z);
-			}
-			System.out.println();
-		}
-		System.out.println();
-	}
+            int r = stoi(st.nextToken());
+            int c = stoi(st.nextToken());
+            int s = stoi(st.nextToken());   // 속력
+            int d = stoi(st.nextToken());   // 이동방향
+            int z = stoi(st.nextToken());   // 크기
 
-	public static void main(String[] args) throws Exception {
-		initial();
-		int a = 0;
-		for (int i = 1; i <= C; i++) {
+            // 위, 아래로만 이동하는 경우
+            if(d == 1 | d == 2) s %= 2 * (R - 1);
+            else s %= 2 * (C - 1);
 
-			a += getShark(i);
-			oneSecond();
+            sharkList.add(new Shark(r, c, s, d, z));
+            plain[r][c] = sharkList.size(); // 1번쨰로 잡힌거 1번으로 저장
+        }
 
-		}
-		System.out.println(a);
-	}
+        // 열 이동하며 상어 낚시 시작
+        for(int c = 1; c <= C; c++)  fishing(c);
+
+        System.out.println(answer);
+    } // end of main
+
+    public static void fishing(int c) {
+
+        for(int r = 1; r <= R; r++) {
+            if(plain[r][c] != 0) {
+                Shark s = sharkList.get(plain[r][c] - 1);
+                plain[r][c] = 0;
+                answer += s.z;
+                s.alive = false;
+                break;
+            } // 해당 열에 상어가 있으면 상어 잡고 크기 합산
+        }
+        // 상어 잡기 완료 후 상어 이동
+        move();
+    } // end of func
+
+    public static int[] dr = {0, -1, 1, 0, 0};  // 고정, 위, 아래, 우, 좌
+    public static int[] dc = {0, 0, 0, 1, -1};
+    public static void move() {
+
+        nextPlain = new int[R + 1][C + 1];
+
+//        System.out.println("---BEFORE---");
+//        for(int i = 0; i <= R; i++) System.out.println(Arrays.toString(plain[i]));
+
+        for(int i = 0; i < sharkList.size(); i++) {
+
+            Shark shark = sharkList.get(i);
+            // 죽은 상어는 pass
+            if(!shark.alive) continue;
+
+            // 상어 스피드만큼 이동 시작
+            moveShark(shark, i, 0);
+        }
+
+//        System.out.println("---AFTER---");
+//        for(int i = 0; i <= R; i++) System.out.println(Arrays.toString(nextPlain[i]));
+
+        update();
+    } // end of func
+
+    /**
+     * @param shark 상어 객체
+     * @param idx   상어의 sharkList 상에서의 위치
+     * @param cnt   이동 횟수
+     */
+    public static void moveShark(Shark shark, int idx, int cnt) {
+
+        if(cnt == shark.s) {
+            // 이동 완료 된 칸에 상어가 없으면 이동
+            if(nextPlain[shark.r][shark.c] == 0) nextPlain[shark.r][shark.c] = idx + 1;
+            else {
+                Shark origin = sharkList.get(nextPlain[shark.r][shark.c] - 1);
+                // 새로온 상어의 사이즈가 더 큰 경우
+                if(origin.z < shark.z) {
+//                    System.out.println("원래 있던 상어: " + nextPlain[shark.r][shark.c]);
+//                    System.out.println("새로 방문한 상어: " + (idx + 1));
+                    origin.alive = false;
+                    nextPlain[shark.r][shark.c] = idx + 1;
+                }
+                // 원래 있던 상어가 더 큰 경우
+                else shark.alive = false;
+            }
+            return;
+        }
+
+        int nr = shark.r + dr[shark.d];
+        int nc = shark.c + dc[shark.d];
+
+        if(isPossible(nr, nc)) {
+            shark.r = nr;
+            shark.c = nc;
+            moveShark(shark, idx, cnt + 1);
+        }
+        else {
+            // 방향 반전 후 재이동
+            if(shark.d == 1) shark.d = 2;
+            else if(shark.d == 2) shark.d = 1;
+            else if(shark.d == 3) shark.d = 4;
+            else if(shark.d == 4) shark.d = 3;
+            moveShark(shark, idx, cnt);
+        }
+    } // end of func
+
+    public static void update() {
+
+        for(int i = 1; i <= R; i++) {
+            for(int j = 1; j <= C; j++) {
+                if(plain[i][j] != nextPlain[i][j]) plain[i][j] = nextPlain[i][j];
+            }
+        }
+    } // end of func
+
+    public static int stoi(String s) {
+        return Integer.parseInt(s);
+    } // end of stoi
+
+    public static boolean isPossible(int r, int c) {
+        return 0 < r && r <= R && 0 < c && c <= C;
+    } // end of func
 }
