@@ -1,8 +1,7 @@
-package others.baekjoon;
+package others.baekjoon.dynamic_programming;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
@@ -31,19 +30,15 @@ public class Main_BJ_9465 {
                 }
             } // end of init
 
+            if(N == 1) {
+                System.out.println(Math.max(cost[0], cost[1]));
+                continue;
+            } // N이 1이면 두 경우중 큰 값 출력 후 다음 tc진행
+
             dp[0] = cost[0];
             dp[1] = cost[1];
-            if(N == 1) {
-                System.out.println(Arrays.stream(dp).max().getAsInt());
-                break;
-            }
-
             dp[2] = dp[1] + cost[2];
             dp[3] = dp[0] + cost[3];
-            if(N == 2) {
-                System.out.println(Arrays.stream(dp).max().getAsInt());
-                break;
-            }
 
             for(int i = 4; i < 2 * N; i++) {
 
@@ -51,7 +46,7 @@ public class Main_BJ_9465 {
                 else dp[i] = Math.max(dp[i - 3], dp[i - 5]) + cost[i];
             }
 
-            System.out.println(Arrays.stream(dp).max().getAsInt());
+            System.out.println(Math.max(dp[2 * N - 1], dp[2 * N - 2]));
         } // end of tc
 
     } // end of main
