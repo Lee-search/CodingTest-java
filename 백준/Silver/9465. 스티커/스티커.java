@@ -1,11 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-/**
- * https://www.acmicpc.net/problem/9465
- */
 public class Main {
 
     static int N;
@@ -45,7 +41,7 @@ public class Main {
                 else dp[i] = Math.max(dp[i - 3], dp[i - 5]) + cost[i];
             }
 
-            System.out.println(Arrays.stream(dp).max().getAsInt());
+            System.out.println(Math.max(dp[2 * N - 1], dp[2 * N - 2]));
         } // end of tc
 
     } // end of main
