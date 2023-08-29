@@ -1,4 +1,4 @@
-package others.baekjoon;
+package others.baekjoon.SOLVED;
 
 // https://www.acmicpc.net/problem/15686
 // 치킨 배달: DFS 백트래킹으로 해결,

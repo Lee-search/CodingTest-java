@@ -1,4 +1,4 @@
-package others.baekjoon;
+package others.baekjoon.SOLVED;
 
 // https://www.acmicpc.net/problem/3190
 // 뱀: 구현, 시뮬레이션, 큐

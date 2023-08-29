@@ -1,4 +1,4 @@
-package others.baekjoon;
+package others.baekjoon.SOLVED;
 
 // https://www.acmicpc.net/problem/14501
 // 퇴사: DFS, DP(로 풀수도있음)

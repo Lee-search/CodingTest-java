@@ -1,4 +1,4 @@
-package others.baekjoon;
+package others.baekjoon.SOLVED;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

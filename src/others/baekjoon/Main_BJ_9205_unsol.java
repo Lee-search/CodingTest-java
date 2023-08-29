@@ -7,7 +7,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main_BJ_9205 {
+public class Main_BJ_9205_unsol {
 
     static int N;
     static boolean[][] visited;
@@ -43,6 +43,8 @@ public class Main_BJ_9205 {
             // end of init
 
             BFS();
+            if(visited[end[0]][end[1]]) sb.append("happy\n");
+            else sb.append("sad\n");
         } // end of tc
 
         System.out.println(sb);
@@ -64,12 +66,11 @@ public class Main_BJ_9205 {
 
             int[] info = q.poll();
             int r = info[0], c = info[1], cnt = info[2], beer = info[3];
+            if(r == end[0] && c == end[1]) return;
+
             if(cnt % 50 == 0) {
                 if(beer > 0) beer -= 1;
-                else {
-                    sb.append("sad\n");
-                    return;
-                }
+                else continue;
 
                 for(int d = 0; d < 4; d++) {
                     int nr = r + dr[d];
@@ -80,8 +81,6 @@ public class Main_BJ_9205 {
                 }
             }
         } // end of while
-
-        sb.append("happy\n");
     } // end of BFS
     public static boolean isPossible(int r, int c) {
         return (0 <= r && r < end[0] && 0 <= c && c <= end[1]) && !visited[r][c];
