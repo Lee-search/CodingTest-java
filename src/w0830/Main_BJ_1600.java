@@ -7,12 +7,18 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main_BJ_1600 {
 
 	static int K, W, H, answer;
 	static int[][] plain;
 	static Queue<int[]> q;
 	static boolean[][][] visited;
+
+	static int[] dr = {-1, 0, 1, 0};
+	static int[] dc = {0, 1, 0, -1};
+
+	static int[] hr = {-2, -1, 1, 2, 2, 1, -1, -2};
+	static int[] hc = {1, 2, 2, 1, -1, -2, -2, -1};
 
 	public static void main(String[] args) throws IOException {
 		
@@ -20,6 +26,7 @@ public class Main {
 		StringTokenizer st = null;
 
 		K = stoi(br.readLine());
+
 		st = new StringTokenizer(br.readLine());
 		W = stoi(st.nextToken());
 		H = stoi(st.nextToken());
@@ -38,17 +45,12 @@ public class Main {
 		System.out.println(answer);
 	} // end of main
 
-	public static int[] dr = {-1, 0, 1, 0};
-	public static int[] dc = {0, 1, 0, -1};
-
-	public static int[] hr = {-2, -1, 1, 2, 2, 1, -1, -2};
-	public static int[] hc = {1, 2, 2, 1, -1, -2, -2, -1};
-
 	// 0,0 -> H - 1, W - 1
 	public static void BFS(int sr, int sc) {
 
 		q = new ArrayDeque<>();
 		q.offer(new int[] {sr, sc, K, 0});
+
 		visited = new boolean[H][W][K + 1];
 		visited[sr][sc][K] = true;
 
@@ -64,7 +66,7 @@ public class Main {
 
 			for(int i = 0; i < 4; i++) {
 				int nr = r + dr[i];
-				int nc = r + dc[i];
+				int nc = c + dc[i];
 
 				if(isPossible(nr, nc, k)) {
 					q.offer(new int[] {nr, nc, k, cnt + 1});
@@ -72,17 +74,16 @@ public class Main {
 				}
 			} // 인접 방향 이동
 
-			if(k > 0) {
-				for(int i = 0; i < 8; i++) {
-					int nr = r + hr[i];
-					int nc = r + hc[i];
+			if(k == 0) continue;
+			for(int i = 0; i < 8; i++) {
+				int nr = r + hr[i];
+				int nc = c + hc[i];
 
-					if(isPossible(nr, nc, k - 1)) {
-						q.offer(new int[] {nr, nc, k - 1, cnt + 1});
-						visited[nr][nc][k-1] = true;
-					}
-				} // 말처럼 이동
-			}
+				if(isPossible(nr, nc, k - 1)) {
+					q.offer(new int[] {nr, nc, k - 1, cnt + 1});
+					visited[nr][nc][k - 1] = true;
+				}
+			} // 말처럼 이동
 		}
 	} // end of BFS
 
