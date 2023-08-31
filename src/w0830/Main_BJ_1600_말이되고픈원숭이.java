@@ -7,7 +7,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main_BJ_1600 {
+public class Main_BJ_1600_말이되고픈원숭이 {
 
 	static int K, W, H, answer;
 	static int[][] plain;

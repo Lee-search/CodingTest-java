@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main_BJ_1010 {
+public class Main_BJ_1010_다리놓기 {
 	
 	static int N, M;
 	static int[][] table;

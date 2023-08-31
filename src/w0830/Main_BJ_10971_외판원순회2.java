@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Main_BJ_10971 {
+public class Main_BJ_10971_외판원순회2 {
 	
 	static int N, answer;
 	static int[][] adjMatrix;
