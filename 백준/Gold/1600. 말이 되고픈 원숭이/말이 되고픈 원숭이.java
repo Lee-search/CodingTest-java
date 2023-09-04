@@ -1,95 +1,90 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringBuilder sb = new StringBuilder();
+	static StringTokenizer st;
 
-	static int K, W, H, answer;
-	static int[][] plain;
-	static Queue<int[]> q;
+	static int K, W, H;
+	static int[][] maps;
 	static boolean[][][] visited;
+	static int minCost;
 
-	static int[] dr = {-1, 0, 1, 0};
-	static int[] dc = {0, 1, 0, -1};
-
-	static int[] hr = {-2, -1, 1, 2, 2, 1, -1, -2};
-	static int[] hc = {1, 2, 2, 1, -1, -2, -2, -1};
-
-	public static void main(String[] args) throws IOException {
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
-
-		K = stoi(br.readLine());
-
+	public static void initial() throws Exception {
+		K = Integer.parseInt(br.readLine());
 		st = new StringTokenizer(br.readLine());
-		W = stoi(st.nextToken());
-		H = stoi(st.nextToken());
-		answer = -1;
-
-		plain = new int[H][W];
-		for(int i = 0; i < H; i++) {
+		W = Integer.parseInt(st.nextToken());
+		H = Integer.parseInt(st.nextToken());
+		maps = new int[H][W];
+		visited = new boolean[H][W][K + 1];
+		for (int i = 0; i < H; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < W; j++) {
-				int n = stoi(st.nextToken());
-				if(n != 0) plain[i][j] = n;
+				maps[i][j] = Integer.parseInt(st.nextToken());
 			}
-		} // end of init
-
-		BFS(0,0);
-		System.out.println(answer);
-	} // end of main
-
-	// 0,0 -> H - 1, W - 1
-	public static void BFS(int sr, int sc) {
-
-		q = new ArrayDeque<>();
-		q.offer(new int[] {sr, sc, K, 0});
-
-		visited = new boolean[H][W][K + 1];
-		visited[sr][sc][K] = true;
-
-		while (!q.isEmpty()) {
-
-			int[] info = q.poll();
-			int r = info[0], c = info[1], k = info[2], cnt = info[3];
-
-			if(r == H - 1 && c == W - 1) {
-				answer = cnt;
-				return;
-			} // basis
-
-			for(int i = 0; i < 4; i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
-
-				if(isPossible(nr, nc, k)) {
-					q.offer(new int[] {nr, nc, k, cnt + 1});
-					visited[nr][nc][k] = true;
-				}
-			} // 인접 방향 이동
-
-			if(k == 0) continue;
-			for(int i = 0; i < 8; i++) {
-				int nr = r + hr[i];
-				int nc = c + hc[i];
-
-				if(isPossible(nr, nc, k - 1)) {
-					q.offer(new int[] {nr, nc, k - 1, cnt + 1});
-					visited[nr][nc][k - 1] = true;
-				}
-			} // 말처럼 이동
 		}
-	} // end of BFS
+		minCost = Integer.MAX_VALUE;
+	}
 
-	public static boolean isPossible(int r, int c, int k) {
-		return 0 <= r && r < H && 0 <= c && c < W && !visited[r][c][k] && plain[r][c] == 0;
-	} // end of func
+	static int[] dRN = new int[] { -2, -1, -2, -1, 2, 1, 2, 1 };
+	static int[] dCN = new int[] { -1, -2, 1, 2, -1, -2, 1, 2 };
 
-	public static int stoi(String s) {
-		return Integer.parseInt(s);
-	} // end of stoi
+	static int[] dR = new int[] { -1, 0, 1, 0 };
+	static int[] dC = new int[] { 0, 1, 0, -1 };
+
+	public static void bfs() {
+		// r, c, cnt, remain
+		int remain = K;
+		int r, c, cnt = 0;
+		int newR, newC;
+		int[] now;
+		boolean isCan = false;
+		Deque<int[]> que = new ArrayDeque<>();
+		que.add(new int[] { 0, 0, 0, remain });
+		visited[0][0][remain] = true;
+		while (!que.isEmpty()) {
+			now = que.poll();
+			r = now[0];
+			c = now[1];
+			cnt = now[2];
+			remain = now[3];
+			if (r == H - 1 && c == W - 1) {
+				isCan = true;
+				break;
+			}
+			for (int i = 0; i < 4; i++) {
+				newR = r + dR[i];
+				newC = c + dC[i];
+				if (newR >= 0 && newC >= 0 && newR < H && newC < W && !visited[newR][newC][remain]
+						&& maps[newR][newC] == 0) {
+					visited[newR][newC][remain] = true;
+					que.add(new int[] { newR, newC, cnt + 1, remain });
+				}
+			}
+			if (remain > 0) {
+				remain--;
+				for (int i = 0; i < 8; i++) {
+					newR = r + dRN[i];
+					newC = c + dCN[i];
+
+					if (newR >= 0 && newC >= 0 && newR < H && newC < W && !visited[newR][newC][remain]
+							&& maps[newR][newC] == 0) {
+						visited[newR][newC][remain] = true;
+						que.add(new int[] { newR, newC, cnt + 1, remain });
+					}
+				}
+			}
+		}
+
+		System.out.println(isCan ? cnt : -1);
+	}
+
+	public static void main(String[] args) throws Exception {
+		initial();
+		bfs();
+	}
 }
