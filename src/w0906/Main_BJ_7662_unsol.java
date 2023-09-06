@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Main_BJ_7662 {
+public class Main_BJ_7662_unsol {
 
     static int K;
     static PriorityQueue<Integer> pqMax, pqMin;
