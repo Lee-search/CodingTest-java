@@ -1,5 +1,11 @@
 package w0906;
 
+/**
+ * 이중 우선순위 큐: https://www.acmicpc.net/problem/7662
+ * PriorityQueue 두개와 HashMap 이용하였으나 시간초과
+ * remove시 원소 전체에 대해 순차탐색을 하여 오래걸리는듯함
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
