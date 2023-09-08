@@ -10,7 +10,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class Main {
+public class Main_BJ_16953 {
 
     static int A, B;
     public static void main(String[] args) {
