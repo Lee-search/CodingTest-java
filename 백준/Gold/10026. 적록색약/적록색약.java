@@ -1,105 +1,111 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.StringTokenizer;
-
-class Idx {
-	int r;
-	int c;
-
-	public Idx(int r, int c) {
-		this.r = r;
-		this.c = c;
-	}
-}
+import java.util.Queue;
 
 public class Main {
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static StringBuilder sb = new StringBuilder();
-	static StringTokenizer st;
 
-	static int nR, nC;
-	static int N;
-	static char[][] maps;
-	static boolean[][] visited;
-
-	public static void search() {
-		for (int i = nR; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (!visited[i][j]) {
-					nR = i;
-					nC = j;
-					return;
-				}
-			}
-		}
-		nR = N - 1;
-		nC = N - 1;
-		return;
-	}
-
-	static int[] dR = { -1, 1, 0, 0 };
-	static int[] dC = { 0, 0, -1, 1 };
-
-	public static int count() {
-		visited = new boolean[N][N];
-		Deque<Idx> que = new ArrayDeque<>();
-		nR = 0;
-		nC = 0;
-		que.add(new Idx(0, 0));
-		visited[0][0] = true;
-		Idx temp;
-		int R, C;
-		char color;
-		int newR, newC;
-		int cnt = 0;
-		while (nR != N - 1 || nC != N - 1) {
-			cnt++;
-			que.add(new Idx(nR, nC));
-			visited[nR][nC] = true;
-			while (!que.isEmpty()) {
-
-				temp = que.poll();
-				R = temp.r;
-				C = temp.c;
-
-				color = maps[R][C];
-				for (int i = 0; i < 4; i++) {
-					newR = R + dR[i];
-					newC = C + dC[i];
-					try {
-						if (!visited[newR][newC] && maps[newR][newC] == color) {
-							visited[newR][newC] = true;
-							que.add(new Idx(newR, newC));
-						}
-					} catch (Exception e) {
-
-					}
-				}
-			}
-			search();
-			if(nR == N-1 && nC == N-1 && !visited[nR][nC]) cnt++;
-		}
-		return cnt;
-	}
+	static int N, ansNomal, ansBlind;
+	static char[][] plain;
+	static boolean[][] vstNomal, vstBilnd;
 
 	public static void main(String[] args) throws Exception {
 
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 		N = Integer.parseInt(br.readLine());
-		maps = new char[N][N];
-		for (int i = 0; i < N; i++) {
-			maps[i] = br.readLine().toCharArray();
+		plain = new char[N][N];
+		vstNomal = new boolean[N][N];
+		vstBilnd = new boolean[N][N];
+
+		for(int i = 0; i < N; i++) {
+			String line = br.readLine();
+			for(int j = 0; j < N; j++) {
+				plain[i][j] = line.charAt(j);
+			}
+		} // end of init
+
+		for(int i = 0; i < N; i++) {
+			for(int j = 0; j < N; j++) {
+				if(!vstNomal[i][j]) {
+					BFS(i, j, vstNomal);
+					ansNomal += 1;
+				}
+
+				if(!vstBilnd[i][j]) {
+					BFS2(i, j, vstBilnd);
+					ansBlind += 1;
+				}
+			}
 		}
-		int cnt1 = count();
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (maps[i][j] == 'G')
-					maps[i][j] = 'R';
+
+		System.out.println(ansNomal + " " + ansBlind);
+	} // end of main
+
+	public static int[] dr = {-1, 0, 1, 0};
+	public static int[] dc = {0, 1, 0, -1};
+
+	public static void BFS(int sr, int sc, boolean[][] visited) {
+
+		Queue<int[]> q = new ArrayDeque<>();
+		char color = plain[sr][sc];
+
+		q.offer(new int[] {sr, sc});
+		visited[sr][sc] = true;
+
+		while(!q.isEmpty()) {
+
+			int[] info = q.poll();
+			int r = info[0], c = info[1];
+
+			for(int d = 0; d < 4; d++) {
+				int nr = r + dr[d], nc = c + dc[d];
+
+				if(isPossible(nr, nc) && !visited[nr][nc]) {
+
+					if(plain[nr][nc] == color) {
+						q.offer(new int[] {nr, nc});
+						visited[nr][nc] = true;
+					}
+				}
 			}
 
 		}
-		int cnt2 = count();
-		System.out.println(cnt1 + " " + cnt2);
-	}
+	} // end of BFS
+
+	public static void BFS2(int sr, int sc, boolean[][] visited) {
+
+		Queue<int[]> q = new ArrayDeque<>();
+		char color = plain[sr][sc];
+		char color2 = '.';
+
+		if(color == 'R') color2 = 'G';
+		else if(color == 'G') color2 = 'R';
+
+		q.offer(new int[] {sr, sc});
+		visited[sr][sc] = true;
+
+		while(!q.isEmpty()) {
+
+			int[] info = q.poll();
+			int r = info[0], c = info[1];
+
+			for(int d = 0; d < 4; d++) {
+				int nr = r + dr[d], nc = c + dc[d];
+
+				if(isPossible(nr, nc) && !visited[nr][nc]) {
+
+					if(plain[nr][nc] == color || plain[nr][nc] == color2) {
+						q.offer(new int[] {nr, nc});
+						visited[nr][nc] = true;
+					}
+				}
+			}
+
+		}
+	} // end of BFS
+
+	public static boolean isPossible(int r, int c) {
+		return 0 <= r && r < N && 0 <= c && c < N;
+	} // end of func
 }
