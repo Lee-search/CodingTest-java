@@ -73,10 +73,8 @@ public class Solution_5656_벽돌깨기 {
 			
 			// broken 된 벽돌 갯수의 최대 값 비교
 			answer = Math.max(answer, brokenList.size());
-			
 //			print();
-//			System.out.println("broken size : " + brokenList.size());
-			
+
 			// BFS 종료 후 rollback
 //			for(int i = 0; i < brokenList.size(); i++) {
 //				int r = brokenList.get(i)[0];
@@ -94,6 +92,24 @@ public class Solution_5656_벽돌깨기 {
 			permutation(cnt + 1);
 		}
 	} // end of func
+
+	public static void drop() {
+	
+		// 모든 열에 대해 시도
+		for(int c = 0; c < W; c++) {
+	
+			// 해당 열에 떨어트릴 경우 제거되는 맨 윗 벽돌 찾기
+			int r = 0;
+			while(r < H && plain[r][c] == 0) ++r;
+			
+			// 벽돌이 존재하지 않으면 다음 열로 건너뛰기
+			if(r == H) continue;
+			
+			// 벽돌이 존재한다면 인접 벽돌 찾기
+			BFS(r, )
+			// 벽돌 내리기
+		}
+	}
 	
 	static int[] dr = {-1, 0, 1, 0};
 	static int[] dc = {0, 1, 0, -1};
@@ -102,13 +118,13 @@ public class Solution_5656_벽돌깨기 {
 	public static void BFS(int w, List<int[]> broken) {
 		
 		Queue<int[]> q = new ArrayDeque<>();
-		boolean[][] visited = new boolean[H][W];
+//		boolean[][] visited = new boolean[H][W];
 		
 		// 1. 벽돌에 부딪힐 때 까지 내려가면서 탐색
 		for(int i = 0; i < H; i++) {
 			if(plain[i][w] != 0) {
-				q.add(new int[] {i, w, plain[i][w]});
-				visited[i][w] = true;
+				if(plain[i][w] > 1) q.add(new int[] {i, w, plain[i][w]});
+//				visited[i][w] = true;
 				plain[i][w] = 0;
 				break;
 			}
@@ -134,9 +150,9 @@ public class Solution_5656_벽돌깨기 {
 						int nr = r + dr[d] * i;
 						int nc = c + dc[d] * i;
 						
-						if(isPossible(nr, nc) && !visited[nr][nc]) {
-							q.add(new int[] {nr, nc, plain[nr][nc]});
-							visited[nr][nc] = true;
+						if(isPossible(nr, nc) && plain[nr][nc] > 0/*!visited[nr][nc]*/) {
+							if(plain[i][w] > 1) q.add(new int[] {nr, nc, plain[nr][nc]});
+//							visited[nr][nc] = true;
 							plain[nr][nc] = 0;
 						}
 					}
@@ -144,24 +160,42 @@ public class Solution_5656_벽돌깨기 {
 			} // end of if-else
 		} // end of while
 		
-//		System.out.println("내려가기 전 ");
-//		print();
-		
 //		 3. BFS 종료 후 블럭 아래로 한칸 씩 이동
-		Queue<Integer> line = new ArrayDeque<>();
-		
-		for(int i = 0; i < W; i++) {
-			for(int j = H - 1; j >= 0; j--) {
-				if(plain[j][i] != 0) {
-					line.add(plain[j][i]);
-					plain[j][i] = 0;
+		down();
+	} // end of BFS
+
+	private static void down() {
+
+		// 열 기준으로 내리기
+		for (int c = 0; c < W; c++) {
+			int r = H - 1, nr = -1;
+			while (r > 0) {
+				if(plain[r][c] == 0) {
+					// 빈칸이면 윗 행부터 내릴 벽돌 찾기
+					nr = r - 1;
+					while(nr > 0 && plain[nr][c] == 0) --nr;
+					plain[r][c] = plain[nr][c];
+					plain[nr][c] = 0; // 빈칸 처리
 				}
-			}
-			for(int j = H - 1; j >= 0; j--) {
-				if(!line.isEmpty()) plain[j][i] = line.poll();
+
+				if(nr == 0) break;
+				--r;
 			}
 		}
-		
+
+//		Queue<Integer> line = new ArrayDeque<>();
+//		for(int i = 0; i < W; i++) {
+//			for(int j = H - 1; j >= 0; j--) {
+//				if(plain[j][i] != 0) {
+//					line.add(plain[j][i]);
+//					plain[j][i] = 0;
+//				}
+//			}
+//			for(int j = H - 1; j >= 0; j--) {
+//				if(!line.isEmpty()) plain[j][i] = line.poll();
+//			}
+//		} // end of for
+
 //		for(int i = H - 2; i >= 0; i--) {
 //			for(int j = 0; j < W; j++) {
 //				if(plain[i][j] != 0 && plain[i + 1][j] == 0) {
@@ -175,18 +209,14 @@ public class Solution_5656_벽돌깨기 {
 //				}
 //			}
 //		}
-		
-//		System.out.println("내려간 후 ");
-//		print();
-		
-	} // end of BFS
-	
-	public static void print() {
-		for(int i = 0; i < H; i++) {
-			System.out.println(Arrays.toString(plain[i]));
-		}
-		System.out.println();
-	} // end
+	} // end of func
+
+//	public static void print() {
+//		for(int i = 0; i < H; i++) {
+//			System.out.println(Arrays.toString(plain[i]));
+//		}
+//		System.out.println();
+//	} // end
 	
 	public static boolean isPossible(int r, int c) {
 		return 0 <= r && r < H && 0 <= c && c < W;
