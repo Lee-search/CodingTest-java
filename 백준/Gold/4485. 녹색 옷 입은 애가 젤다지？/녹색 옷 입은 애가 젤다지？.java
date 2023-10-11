@@ -67,6 +67,8 @@ public class Main {
             int c = current.c;
             int cost = current.weight;
 
+            if(r == N - 1 && c == N - 1) break;
+
             for(int d = 0; d < 4; d++) {
                 int nr = r + dr[d];
                 int nc = c + dc[d];
