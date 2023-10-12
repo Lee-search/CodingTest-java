@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/**
+ * 젤다 : https://www.acmicpc.net/problem/4485
+ * 다익스트라 알고리즘
+ */
 public class Main_BJ_4485 {
 
 	static int N;
