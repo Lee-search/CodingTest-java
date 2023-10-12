@@ -29,13 +29,11 @@ public class Main {
 				// 두 문자가 다르다면, 지금까지의 LCS 중 최대값 저장
 				else
 					LCS[i][j]= Math.max(LCS[i-1][j], LCS[i][j-1]);
-				
-				answer = Math.max(answer, LCS[i][j]);
 			}
 		} // end of for
 		
 //		print();
-		System.out.println(answer);
+		System.out.println(LCS[len1][len2]);
 	} // end of main
 	
 //	public static void print() {
