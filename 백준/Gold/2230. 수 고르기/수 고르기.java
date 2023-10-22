@@ -24,15 +24,19 @@ public class Main {
         Arrays.sort(nArray);
 
         // 주의, 같은 수일 수도 있음
-        for (int left = 0; left < N; left++) {
+        here: for (int left = 0; left < N; left++) {
             for (int right = left; right < N; right++) {
                 int n = nArray[right] - nArray[left];
-                if (n >= M) {
+                if(n == M) {
+                    answer = M;
+                    break here;
+                }
+                else if (n > M) {
                     answer = Math.min(answer, n);
                     break;
                 }
             }
-        }
+        } // end of for
 
         System.out.println(answer);
     } // end of main
