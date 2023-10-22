@@ -23,20 +23,15 @@ public class Main {
 
         Arrays.sort(nArray);
 
-        // 주의, 같은 수일 수도 있음
-        here: for (int left = 0; left < N; left++) {
-            for (int right = left; right < N; right++) {
-                int n = nArray[right] - nArray[left];
-                if(n == M) {
-                    answer = M;
-                    break here;
-                }
-                else if (n > M) {
-                    answer = Math.min(answer, n);
-                    break;
-                }
+        int left = 0, right = 0;
+        while(left <= right && right < N) {
+            int n = nArray[right] - nArray[left];
+            if(n >= M) {
+                answer = Math.min(answer, n);
+                left += 1;
             }
-        } // end of for
+            else right += 1;
+        }
 
         System.out.println(answer);
     } // end of main
