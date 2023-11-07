@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Main_BJ_11559_unsol {
+/**
+ * Puyo Puyo : https://www.acmicpc.net/problem/11559
+ * BFS 완전탐색, 같은 뿌요 탐색 + 뿌요 내리는 동작에서 Queue 2번 사용
+ */
+
+public class Main_BJ_11559 {
 
     static char[][] plain;
     static int answer;
@@ -21,31 +26,34 @@ public class Main_BJ_11559_unsol {
             }
         } // end of init
 
-
         while (true) {
 
-            boolean flag = false;
-            // 1. BFS 후 뿌요 여부 저장
+            boolean puyo = false;
+            // BFS 후 뿌요 확인
             for(int r = 11; r >= 0; r--) {
                 for (int c = 0; c < 6; c++) {
                     if(plain[r][c] == '.') continue;
-                    if(BFS(r, c)) flag = true;
+                    if(BFS(r, c)) puyo = true;
                 }
             }
-            System.out.println("뿌요 후");
-            print();
-            // 2. 내리기
-            down();
-            System.out.println("내린 후");
-            print();
 
-            if(flag) answer += 1;
-            else {
+            // 뿌요 터진 경우, 내리고 카운트 업
+            if(puyo) {
+//                System.out.println("내리기 전");
+//                print();
+
+                down();
+
+//                System.out.println("내린 후");
+//                print();
+//                System.out.println("-----");
+
+                answer += 1;
+            } else {
                 System.out.println(answer);
-                return;
+                break;
             }
-        }
-
+        } // end of while
     } // end of main
 
     public static void down() {
@@ -54,7 +62,7 @@ public class Main_BJ_11559_unsol {
         
         // 1. 각 열별로
         for (int c = 0; c < 6; c++) {
-            // 2. . 이 아닌 것 모두 담아서
+            // 2. 블럭 모두 담아서
             for (int r = 11; r >= 0; r--) {
                 if(plain[r][c] != '.') {
                     q.offer(plain[r][c]);
@@ -81,11 +89,11 @@ public class Main_BJ_11559_unsol {
         ArrayList<int[]> list = new ArrayList<>();
         list.add(new int[]{sr, sc});
 
-        int color = plain[sr][sc];
+        char color = plain[sr][sc];
         int count = 1;  // 같은 색깔 뿌요 갯수
         
         q.offer(new int[]{sr, sc});
-        visited[sc][sc] = true;
+        visited[sr][sc] = true;
 
         while (!q.isEmpty()) {
 
@@ -111,7 +119,6 @@ public class Main_BJ_11559_unsol {
                 int r = info[0], c = info[1];
                 plain[r][c] = '.';
             }
-
             return true;
         }
         return false;
@@ -125,6 +132,5 @@ public class Main_BJ_11559_unsol {
         for (int i = 0; i < 12; i++) {
             System.out.println(Arrays.toString(plain[i]));
         }
-        System.out.println("------");
     } // end of func
 }
