@@ -6,7 +6,12 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.Math.max;
+
+/**
+ * 상어 초등학교: https://www.acmicpc.net/problem/21608
+ * 구현, for문의 r, c 탐색 순서에 따라 자연스럽게 조건3의 우선순위가 형성됨
+ * 입력과 동시에 자리배치를 진행해서 반복문 최적화 가능
+ */
 
 public class Main_BJ_21608 {
 
