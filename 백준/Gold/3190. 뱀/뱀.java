@@ -1,109 +1,131 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static final String ArrayList = null;
-
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	
+	static int N, K, L, Answer;
+	static int[][] plain;
+	static Map<Integer, Character> dirInfos;
+	
+	public static void main(String[] args) throws Exception {
 		
-		/* INPUT */ 
-		// n: 보드 사이즈 / k: 사과 갯수
-		int n = sc.nextInt();
-		int k = sc.nextInt();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
 		
-		int[][] plain = new int [n + 1][n + 1];
+		N = stoi(br.readLine());	// 보드 크기
+		K = stoi(br.readLine());	// 사과 갯수
+		plain = new int[N + 1][N + 1];
+		dirInfos = new HashMap<>();
 		
-		for (int i = 0; i < k; i++) {
-			// 사과 위치 받아서 저장
-			int r = sc.nextInt(), c = sc.nextInt();
-			plain[r][c] = 1;
+		// 사과의 위치
+		for(int i = 0; i < K; i++) {
+			st = new StringTokenizer(br.readLine());
+			int r = stoi(st.nextToken());
+			int c = stoi(st.nextToken());
+			
+			plain[r][c] = 1;	// 사과를 1로 표시
 		}
 		
-		int l = sc.nextInt();
-		char[] rotate = new char [10000];
-		
-		// n초 뒤 L / D 로 90도 회전
-		for (int i = 0; i < l; i++) {
-			int sec = sc.nextInt();
-			char c = sc.next().charAt(0);
-			
-			rotate[sec] = c;
+		L = stoi(br.readLine());	// 뱀의 방향 전환 횟수
+		for(int i = 0; i < L; i++) {
+			st = new StringTokenizer(br.readLine());
+			int x = stoi(st.nextToken());
+			char c = st.nextToken().toCharArray()[0];
+			// 방향전환 정보 저장
+			dirInfos.put(x, c);
 		}
 		
-		/* MAIN */
-		// 뱀 기본좌표
-		int r = 1, c = 1, d = 1;
-		plain[r][c] = -1;
-		// 현재 꼬리 위치 저장
-		List<int[]> snake = new ArrayList<>();
-		snake.add(new int[] {r, c});
+		start();	// 시뮬레이션 시작
 		
-		// 상, 우, 하, 좌
-		int[] dr = {-1, 0, 1, 0};
-		int[] dc = {0, 1, 0, -1};
+		System.out.println(Answer);
 		
+	} // end of main
+	
+	static int[] dr = {0, 1, 0, -1};
+	static int[] dc = {1, 0, -1, 0};
+	static void start() {
 		
-		// 1초에 한칸 씩 움직임
-		for (int sec = 1; sec <= 10000; sec++) {
-
-			int nr = r + dr[d];
-			int nc = c + dc[d];
-			/*
-			System.out.print("시간: " + sec + "초\n" + "이동: " +  nr + " " + nc + "\n" + "회전: " + rotate[sec] + "\n");
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					System.out.print(plain[i][j] + " ");
-				}
-				System.out.println();
-			}
-			*/
+		int second = 0;	// 경과 시간
+		int dir = 0;	// 현재의 머리 방향
+		// Deque의 First를 머리로, Last를 꼬리로 저장
+		Deque<int[]> snake = new ArrayDeque<>();
+		snake.add(new int[] {1, 1});	// 초기값 저장
+		
+		while(true) {
+			// 초 증가
+			second += 1;
 			
-			// OOR
-			if (nr > n || nr <= 0 || nc > n || nc <= 0) {
-				System.out.println(sec);
-				break;
-			}
-			// 스스로 부딪힘
-			if (plain[nr][nc] == -1) {
-				System.out.println(sec);
-				break;
-			}
-			// 사과 만남
-			else if (plain[nr][nc] == 1) {
-				// 머리 이동
-				plain[nr][nc] = -1;
-				snake.add(new int[] {nr, nc});
-			}
-			else {
-				// 머리 이동
-				plain[nr][nc] = -1;
-				snake.add(new int[] {nr, nc});
-				// 꼬리 이동
-				plain[snake.get(0)[0]][snake.get(0)[1]] = 0;
-				snake.remove(0);
+			// 머리 이동 위치 확인
+			int r = snake.getFirst()[0];
+			int c = snake.getFirst()[1];
+			
+			int nr = r + dr[dir];
+			int nc = c + dc[dir];
+			
+			// 벽인지 확인
+			if(nr <= 0 || nr > N || nc <= 0 || nc > N) {
 				
+				Answer = second;
+				return;	// 벽에 부딫혔으므로 게임 종료
 			}
-			// 이동
-			r = nr;
-			c = nc;
 			
-			// 끝난 뒤 방향 변경
-			if (rotate[sec] == 'L') {
-				if (d == 0) {
-					d = 3;
-				}
-				else {
-					d -= 1;
-				}
-			}
-			else if (rotate[sec] == 'D') {
-				if (d == 3) {
-					d = 0;
-				}
-				else {
-					d += 1;
+			// 자기 몸통에 부딫혔는지 확인
+			for(int[] info : snake) {
+				
+				if(info[0] == nr && info[1] == nc) {
+					
+					Answer = second;
+					return;	// 자기 자신에 부딫혔으므로 게임 종료
 				}
 			}
+			
+			// 머리 정보 추가
+			snake.addFirst(new int[] {nr, nc});
+			
+			// 사과가 있으면? 지도에서 사과 제거 후 그대로
+			if(plain[nr][nc] == 1) {
+				plain[nr][nc] = 0;
+			}
+			// 사과가 없으면? 꼬리칸에 대한 정보 제거
+			else {
+				snake.removeLast();
+			}
+			
+			// 방향 전환 정보가 있는지 확인
+			if(dirInfos.get(second) != null) {
+				
+				// 있다면 고개 돌리기
+				dir = getDir(dir, dirInfos.get(second));
+			}
+			
+//			System.out.println("현재 초: " + second);
+//			System.out.print("현재 뱀 모습: ");
+//			for(int[] info : snake) {
+//				System.out.print("[" + info[0] + ", " + info[1] + "], ");
+//			}
+//			System.out.println();
 		}
-	}
+	} // end of func
+	
+	// 방향 전환 과정을 담당하는 함수
+	static int getDir(int dir, char ch) {
+		
+		if(ch == 'L') {	// 왼쪽으로 고개 돌림
+			
+			if(dir == 0) dir = 3;
+			else dir -= 1;
+		}
+		else {	// 오른쪽으로 고개 돌림
+			
+			if(dir == 3) dir = 0;
+			else dir += 1;
+		}
+		
+		return dir;
+	} // end of func
+	
+	static int stoi(String s) {
+		return Integer.parseInt(s);
+	} // end of stoi
+
 }
