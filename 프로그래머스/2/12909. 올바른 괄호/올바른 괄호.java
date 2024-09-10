@@ -4,16 +4,10 @@ class Solution {
     
     boolean solution(String s) {
         
-        Queue<Character> q = new ArrayDeque<>();
-        
-        for(int i = 0; i < s.length(); i++) {
-            q.offer(s.charAt(i));
-        }
-        
         int count = 0;
-        while(!q.isEmpty()) {
+        for(int i = 0; i < s.length(); i++) {
             
-            char ch = q.poll();
+            char ch = s.charAt(i);
             if(ch == '(') {
                 count += 1;
             }
