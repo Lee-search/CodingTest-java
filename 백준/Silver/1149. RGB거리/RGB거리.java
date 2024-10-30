@@ -1,46 +1,35 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	
-	static int N;
-	static int[] cost;
-	static int[] dp;
-	
-	public static void main(String[] args) throws Exception {
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = null;
-		
-		N = stoi(br.readLine());
-		cost = new int[3 * N];
-		dp = new int[3 * N];
-		
-		for(int i= 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j = 0; j < 3; j++)
-				cost[3 * i + j] = stoi(st.nextToken());
-		} // end of init
-		
-		dp[0] = cost[0];
-		dp[1] = cost[1];
-		dp[2] = cost[2];
-		
-		for(int i = 3; i < N * 3; i++) {
-			
-			if(i % 3 == 0) dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i];
-			else if(i % 3 == 1) dp[i] = Math.min(dp[i - 2], dp[i - 4]) + cost[i];
-			else if(i % 3 == 2) dp[i] = Math.min(dp[i - 4], dp[i - 5]) + cost[i];
-			
-//			System.out.println(i + ", dp: " + Arrays.toString(dp));
-		}
-		
-		System.out.println(Math.min(Math.min(dp[3 * N - 1], dp[3 * N - 2]), dp[3 * N - 3]));
-	} // end of main
-	
-	public static int stoi(String s) {
-		return Integer.parseInt(s);
-	} // end of stoi
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = null;
+        int N = Integer.parseInt(br.readLine());
+        int[][] dp = new int[N][3];     // dp[i][j]: i번째 집을 j번 색으로 칠하는 경우의 최소값
+        int[][] cost = new int[N][3];   // N개의 집을 R,G,B로 칠하는데 드는 비용
+
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            cost[i][0] = Integer.parseInt(st.nextToken());
+            cost[i][1] = Integer.parseInt(st.nextToken());
+            cost[i][2] = Integer.parseInt(st.nextToken());
+        }
+
+        dp[0][0] = cost[0][0];
+        dp[0][1] = cost[0][1];
+        dp[0][2] = cost[0][2];
+
+        for (int i = 1; i < N; i++) {
+            dp[i][0] = Math.min(dp[i - 1][1], dp[i - 1][2]) + cost[i][0];
+            dp[i][1] = Math.min(dp[i - 1][0], dp[i - 1][2]) + cost[i][1];
+            dp[i][2] = Math.min(dp[i - 1][0], dp[i - 1][1]) + cost[i][2];
+        }
+
+        System.out.println(Math.min(dp[N - 1][0], Math.min(dp[N - 1][1], dp[N - 1][2])));
+    }
 }
